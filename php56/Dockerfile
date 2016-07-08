@@ -4,20 +4,12 @@ FROM php:5.6-fpm
 COPY docker-entrypoint.sh /entrypoint.sh
 
 # install the PHP extensions we need
-RUN apt-get update && apt-get install -y unzip libpng12-dev libjpeg-dev && rm -rf /var/lib/apt/lists/* \
-	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mysqli opcache
-
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=60'; \
-		echo 'opcache.fast_shutdown=1'; \
-		echo 'opcache.enable_cli=1'; \
-	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends unzip \
+  && rm -rf /var/lib/apt/lists/* \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && docker-php-ext-install mysqli
 
 ENV BUILD_TAG latest
 ENV WORDPRESS_VERSION 4.5.3
@@ -25,9 +17,10 @@ ENV WORDPRESS_SHA1 835b68748dae5a9d31c059313cd0150f03a49269
 
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
-	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
-	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
-	&& rm wordpress.tar.gz
+  && echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
+  && tar -xzf wordpress.tar.gz -C /usr/src/ \
+  && rm wordpress.tar.gz \
+  && mkdir /usr/src/wordpress/wp-content/plugins/woocommerce-pos
 
 # wordpress importer
 RUN curl -o temp.zip -SL https://downloads.wordpress.org/plugin/wordpress-importer.zip \

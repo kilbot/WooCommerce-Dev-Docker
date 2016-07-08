@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# variables
+PROJECT_ROOT="$(dirname "$(pwd)")"
+
 if [ ! -d $BUILD_TAG ]; then
   mkdir -p $BUILD_TAG
 fi
@@ -40,6 +43,7 @@ if [ ! -e wp-config.php ]; then
   wp core config --allow-root --skip-check --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --extra-php <<PHP
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
+define( 'SCRIPT_DEBUG', true );
 PHP
 fi
 
@@ -47,6 +51,7 @@ if ! $(wp core is-installed --allow-root); then
   wp core install --allow-root --url=latest --title=Latest --admin_user=admin --admin_password=password --admin_email=support@wcpos.com
   wp plugin activate wordpress-importer --allow-root
   wp plugin activate woocommerce --allow-root
+  wp plugin activate woocommerce-pos --allow-root
   wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --skip=attachment --authors=create
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root

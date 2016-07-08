@@ -7,7 +7,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./.html:/usr/share/nginx/html
+      - ../.html:/usr/share/nginx/html
+      - ../:/usr/share/nginx/html/latest/wp-content/plugins/woocommerce-pos
     links:
       - php54
       - php55
@@ -25,7 +26,8 @@ services:
     ports:
       - "9054:9000"
     volumes:
-      - ./.html:/var/www/html
+      - ../.html:/var/www/html
+      - ../:/var/www/html/latest/wp-content/plugins/woocommerce-pos
     links:
       - mysql56
       - mysql57
@@ -39,7 +41,8 @@ services:
     ports:
       - "9055:9000"
     volumes:
-      - ./.html:/var/www/html
+      - ../.html:/var/www/html
+      - ../:/var/www/html/latest/wp-content/plugins/woocommerce-pos
     links:
       - mysql56
       - mysql57
@@ -54,7 +57,8 @@ services:
     ports:
       - "9056:9000"
     volumes:
-      - ./.html:/var/www/html
+      - ../.html:/var/www/html
+      - ../:/var/www/html/latest/wp-content/plugins/woocommerce-pos
     links:
       - mysql56
       - mysql57
@@ -62,7 +66,7 @@ services:
       - mysql56
       - mysql57
     environment:
-      WORDPRESS_DB_HOST: mysql56:3306
+      WORDPRESS_DB_HOST: mysql57:3306
       WORDPRESS_DB_PASSWORD: wordpress
 
   php70:
@@ -71,7 +75,8 @@ services:
     ports:
       - "9070:9000"
     volumes:
-      - ./.html:/var/www/html
+      - ../.html:/var/www/html
+      - ../:/var/www/html/latest/wp-content/plugins/woocommerce-pos
     links:
       - mysql56
       - mysql57
@@ -91,18 +96,18 @@ services:
     ports:
       - "9016:3306"
     volumes:
-      - ./.data/mysql56:/var/lib/mysql
+      - ../.data/mysql56:/var/lib/mysql
 
   mysql57:
     build: ./mysql57
     container_name: mysql57
     restart: always
     environment:
-       MYSQL_ROOT_PASSWORD: wordpress
-       MYSQL_DATABASE: wordpress
-       MYSQL_USER: wordpress
-       MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
     ports:
-       - "9017:3306"
+      - "9017:3306"
     volumes:
-       - ./.data/mysql57:/var/lib/mysql
+      - ../.data/mysql57:/var/lib/mysql
