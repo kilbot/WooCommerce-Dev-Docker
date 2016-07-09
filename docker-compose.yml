@@ -6,6 +6,7 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ../.html:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/latest/wp-content/plugins/woocommerce-pos

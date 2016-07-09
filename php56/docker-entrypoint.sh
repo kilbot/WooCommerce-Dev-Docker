@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-# variables
-PROJECT_ROOT="$(dirname "$(pwd)")"
-
 if [ ! -d $BUILD_TAG ]; then
   mkdir -p $BUILD_TAG
 fi
@@ -48,7 +45,7 @@ PHP
 fi
 
 if ! $(wp core is-installed --allow-root); then
-  wp core install --allow-root --url=latest --title=Latest --admin_user=admin --admin_password=password --admin_email=support@wcpos.com
+  wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=support@wcpos.com
   wp plugin activate wordpress-importer --allow-root
   wp plugin activate woocommerce --allow-root
   wp plugin activate woocommerce-pos --allow-root
