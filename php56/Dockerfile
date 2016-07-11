@@ -11,6 +11,14 @@ RUN apt-get update \
   && docker-php-ext-enable xdebug \
   && docker-php-ext-install mysqli
 
+# xdebug options
+RUN { \
+  echo 'xdebug.remote_enable=1'; \
+  echo 'xdebug.remote_port=9000'; \
+  echo 'xdebug.remote_host=172.22.0.1'; \
+  echo 'xdebug.idekey=PHPSTORM'; \
+} > /usr/local/etc/php/conf.d/xdebug.ini
+
 ENV BUILD_TAG latest
 ENV WORDPRESS_VERSION 4.5.3
 ENV WORDPRESS_SHA1 835b68748dae5a9d31c059313cd0150f03a49269

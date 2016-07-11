@@ -1,6 +1,7 @@
 FROM nginx
 
 COPY *.conf /etc/nginx/conf.d/
+COPY includes/*.conf /etc/nginx/conf.d/includes/
 
 # generate self signed ssl cert
 RUN mkdir /etc/nginx/ssl \
