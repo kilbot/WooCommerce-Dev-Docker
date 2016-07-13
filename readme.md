@@ -7,7 +7,7 @@
 * Docker >= 1.8.3
 * Docker Compose
 
-See [Docker.com](https://www.docker.com/products/overview) for more information.
+See [Docker.com](https://www.docker.com/products/docker) for more information.
 
 ### Useful commands
 
