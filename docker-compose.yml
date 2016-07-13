@@ -69,6 +69,7 @@ services:
     environment:
       WORDPRESS_DB_HOST: mysql57:3306
       WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_TESTS_DB_NAME: wordpress_tests
 
   php70:
     build: ./php70
@@ -92,8 +93,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: wordpress
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_TESTS_DATABASE: wordpress_tests
     ports:
       - "9016:3306"
     volumes:
@@ -106,8 +106,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: wordpress
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_TESTS_DATABASE: wordpress_tests
     ports:
       - "9017:3306"
     volumes:

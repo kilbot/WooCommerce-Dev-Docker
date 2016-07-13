@@ -10,7 +10,7 @@ cd $BUILD_TAG
 if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 	: "${WORDPRESS_DB_HOST:=mysql}"
 	# if we're linked to MySQL and thus have credentials already, let's use them
-	: ${WORDPRESS_DB_USER:=${MYSQL_ENV_MYSQL_USER:-wordpress}}
+	: ${WORDPRESS_DB_USER:=${MYSQL_ENV_MYSQL_USER:-root}}
 	if [ "$WORDPRESS_DB_USER" = 'root' ]; then
 		: ${WORDPRESS_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
 	fi
@@ -36,14 +36,28 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 	fi
 fi
 
+# wp-config
 if [ ! -e wp-config.php ]; then
   wp core config --allow-root --skip-check --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --extra-php <<PHP
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'SCRIPT_DEBUG', true );
+define( 'WP_HOME', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION .'.local' );
+define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION .'.local' );
 PHP
 fi
 
+# unit tests config
+if [ ! -f wordpress-tests-lib/wp-tests-config.php ]; then
+  cp wordpress-tests-lib/wp-tests-config-sample.php wordpress-tests-lib/wp-tests-config.php
+  sed -i "s:dirname( __FILE__ ) . '/src/':'$(pwd)/':" wordpress-tests-lib/wp-tests-config.php
+  sed -i "s/youremptytestdbnamehere/$WORDPRESS_TESTS_DB_NAME/" wordpress-tests-lib/wp-tests-config.php
+  sed -i "s/yourusernamehere/$WORDPRESS_DB_USER/" wordpress-tests-lib/wp-tests-config.php
+  sed -i "s/yourpasswordhere/$WORDPRESS_DB_PASSWORD/" wordpress-tests-lib/wp-tests-config.php
+  sed -i "s|localhost|${WORDPRESS_DB_HOST}|" wordpress-tests-lib/wp-tests-config.php
+fi
+
+# set up wordpress & plugins
 if ! $(wp core is-installed --allow-root); then
   wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=support@wcpos.com
   wp plugin activate wordpress-importer --allow-root

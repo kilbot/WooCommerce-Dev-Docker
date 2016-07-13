@@ -15,3 +15,13 @@ RUN { \
   echo 'xdebug.remote_host=172.22.0.1'; \
   echo 'xdebug.idekey=PHPSTORM'; \
 } > /usr/local/etc/php/conf.d/xdebug.ini
+
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
+ENV PATH /root/.composer/vendor/bin:$PATH
+
+# install phpunit
+RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar \
+  && chmod +x phpunit.phar \
+  && mv phpunit.phar /usr/local/bin/phpunit \
+  && phpunit --version
