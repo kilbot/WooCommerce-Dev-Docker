@@ -1,8 +1,11 @@
 FROM php:5.5-fpm
 
+# copy endpoint script
+COPY docker-entrypoint.sh /entrypoint.sh
+
 # install the PHP extensions we need
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends unzip \
+  && apt-get install -y --no-install-recommends unzip subversion \
   && rm -rf /var/lib/apt/lists/* \
   && pecl install xdebug \
   && docker-php-ext-enable xdebug \
@@ -25,3 +28,13 @@ RUN curl https://phar.phpunit.de/phpunit-old.phar -L > phpunit.phar \
   && chmod +x phpunit.phar \
   && mv phpunit.phar /usr/local/bin/phpunit \
   && phpunit --version
+
+# add wp-cli for use in entrypoint, also fix permissions
+RUN curl -o /usr/local/bin/wp -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x /usr/local/bin/wp \
+  && wp --info --allow-root \
+  && chmod +x /entrypoint.sh
+
+# grr, ENTRYPOINT resets CMD now
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]
