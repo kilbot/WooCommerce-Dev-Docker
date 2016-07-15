@@ -2,6 +2,7 @@ FROM php:5.4-fpm
 
 # copy endpoint script
 COPY docker-entrypoint.sh /entrypoint.sh
+ADD https://raw.githubusercontent.com/kilbot/WooCommerce-Dev-Docker/master/bin/entrypoint-common.sh /
 
 # install the PHP extensions we need
 RUN apt-get update \
@@ -33,7 +34,8 @@ RUN curl https://phar.phpunit.de/phpunit-old.phar -L > phpunit.phar \
 RUN curl -o /usr/local/bin/wp -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
   && chmod +x /usr/local/bin/wp \
   && wp --info --allow-root \
-  && chmod +x /entrypoint.sh
+  && chmod +x /entrypoint.sh \
+  && chmod +x /entrypoint-common.sh
 
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
