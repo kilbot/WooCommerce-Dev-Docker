@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
+# env variables
 WP_VERSION=${WP_VERSION-latest}
 WC_VERSION=${WC_VERSION-latest}
+PROJECT_NAME=${PROJECT_NAME-project}
 
 # install wordpress
 if ! [ -e index.php -a -e wp-includes/version.php ]; then
@@ -22,14 +24,14 @@ fi
 
 # set up db & plugins
 if ! $(wp core is-installed --allow-root); then
-  wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=support@wcpos.com
+  wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   wp plugin install wordpress-importer --allow-root --activate
   if [[ $WC_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
   fi
-  wp plugin activate woocommerce-pos --allow-root
+  wp plugin activate $PROJECT_NAME --allow-root
   wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --skip=attachment --authors=create
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root

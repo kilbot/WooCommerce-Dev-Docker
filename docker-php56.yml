@@ -12,39 +12,36 @@ services:
       - "443:443"
     volumes:
       - ../.html:/usr/share/nginx/html
-      - ../:/usr/share/nginx/html/latest/wp-content/plugins/woocommerce-pos
+      - ../:/usr/share/nginx/html/wp-content/plugins/${PROJECT_NAME}
     links:
       - php56
     depends_on:
       - php56
+    env_file: ../.env
 
   php56:
     build: ./php56
     container_name: php56
     restart: always
     ports:
-      - "9056:9000"
+      - "9054:9000"
     volumes:
       - ../.html:/var/www/html
-      - ../:/var/www/html/latest/wp-content/plugins/woocommerce-pos
+      - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
     links:
       - mysql57
     depends_on:
       - mysql57
-    environment:
-      WORDPRESS_DB_HOST: mysql57:3306
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_TESTS_DB_NAME: wordpress_tests
+    env_file:
+      - wordpress.env
+      - ../.env
 
   mysql57:
     build: ./mysql57
     container_name: mysql57
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_TESTS_DATABASE: wordpress_tests
     ports:
       - "9017:3306"
     volumes:
       - ../.data/mysql57:/var/lib/mysql
+    env_file: mysql.env
