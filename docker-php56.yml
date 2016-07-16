@@ -17,6 +17,9 @@ services:
       - php56
     depends_on:
       - php56
+    expose:
+      - "80"
+      - "443"
     env_file: ../.env
 
   php56:
@@ -32,6 +35,8 @@ services:
       - mysql57
     depends_on:
       - mysql57
+    extra_hosts:
+      - "php56.local:172.22.0.1"
     env_file:
       - wordpress.env
       - ../.env

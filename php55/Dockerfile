@@ -21,8 +21,9 @@ RUN { \
 } > /usr/local/etc/php/conf.d/xdebug.ini
 
 # install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 ENV PATH /root/.composer/vendor/bin:$PATH
+RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
+  && composer global require guzzlehttp/guzzle:5
 
 # install (old) phpunit
 RUN curl https://phar.phpunit.de/phpunit-old.phar -L > phpunit.phar \

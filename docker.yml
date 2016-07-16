@@ -20,10 +20,14 @@ services:
       - php55
       - php56
       - php70
+    expose:
+      - "80"
+      - "443"
 
   php54:
     build: ./php54
     container_name: php54
+    restart: always
     ports:
       - "9054:9000"
     volumes:
@@ -35,11 +39,14 @@ services:
     depends_on:
       - mysql56
       - mysql57
+    extra_hosts:
+      - "php54.local:172.22.0.1"
     env_file: wordpress.env
 
   php55:
     build: ./php55
     container_name: php55
+    restart: always
     ports:
       - "9055:9000"
     volumes:
@@ -51,6 +58,8 @@ services:
     depends_on:
       - mysql56
       - mysql57
+    extra_hosts:
+      - "php55.local:172.22.0.1"
     env_file: wordpress.env
 
   php56:
@@ -68,11 +77,14 @@ services:
     depends_on:
       - mysql56
       - mysql57
+    extra_hosts:
+      - "php56.local:172.22.0.1"
     env_file: wordpress.env
 
   php70:
     build: ./php70
     container_name: php70
+    restart: always
     ports:
       - "9070:9000"
     volumes:
@@ -84,6 +96,8 @@ services:
     depends_on:
       - mysql56
       - mysql57
+    extra_hosts:
+      - "php70.local:172.22.0.1"
     env_file: wordpress.env
 
   mysql56:
