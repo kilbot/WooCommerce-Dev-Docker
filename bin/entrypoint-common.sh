@@ -26,14 +26,25 @@ fi
 
 # set up db & plugins
 if ! $(wp core is-installed --allow-root); then
-  wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
-  wp plugin install wordpress-importer --allow-root --activate
+
+  # install WordPress
+  if [ $WP_MULTISITE = "1" ]; then
+    wp core multisite-install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
+  else
+    wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
+  fi
+
+  # install WooCommerce
   if [ $WC_VERSION != "latest" ]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
   fi
+
+  # activate the current project
   wp plugin activate $PROJECT_NAME --allow-root
+
+  wp plugin install wordpress-importer --allow-root --activate
   wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --skip=attachment --authors=create
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root
