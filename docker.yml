@@ -25,6 +25,7 @@ services:
           - php55.local
           - php56.local
           - php70.local
+    env_file: ../.env
 
   php54:
     build: ./php54
@@ -42,7 +43,9 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
-    env_file: wordpress.env
+    env_file:
+      - wordpress.env
+      - ../.env
 
   php55:
     build: ./php55
@@ -60,7 +63,9 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
-    env_file: wordpress.env
+    env_file:
+      - wordpress.env
+      - ../.env
 
   php56:
     build: ./php56
@@ -78,7 +83,9 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
-    env_file: wordpress.env
+    env_file:
+      - wordpress.env
+      - ../.env
 
   php70:
     build: ./php70
@@ -96,7 +103,9 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
-    env_file: wordpress.env
+    env_file:
+      - wordpress.env
+      - ../.env
 
   mysql56:
     build: ./mysql56
