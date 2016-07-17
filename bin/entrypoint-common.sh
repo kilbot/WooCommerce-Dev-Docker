@@ -56,8 +56,3 @@ if [ ! -f wordpress-tests-lib/wp-tests-config.php ]; then
   sed -i "s/yourpasswordhere/$WORDPRESS_DB_PASSWORD/" wordpress-tests-lib/wp-tests-config.php
   sed -i "s|localhost|${WORDPRESS_DB_HOST}|" wordpress-tests-lib/wp-tests-config.php
 fi
-
-## install vendor scripts for unit tests
-#if [ ! -d vendor ]; then
-#  composer install --working-dir=$(wp plugin path --allow-root)/woocommerce-pos
-#fi

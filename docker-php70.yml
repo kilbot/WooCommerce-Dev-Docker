@@ -13,13 +13,15 @@ services:
     volumes:
       - ../.html:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/wp-content/plugins/${PROJECT_NAME}
-    links:
-      - php70
     depends_on:
       - php70
     expose:
       - "80"
       - "443"
+    networks:
+      default:
+        aliases:
+          - php70.local
     env_file: ../.env
 
   php70:
@@ -31,12 +33,12 @@ services:
     volumes:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
-    links:
-      - mysql57
     depends_on:
       - mysql57
     extra_hosts:
-      - "php70.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
+    networks:
+      - default
     env_file:
       - wordpress.env
       - ../.env
@@ -49,4 +51,9 @@ services:
       - "9017:3306"
     volumes:
       - ../.data/mysql57:/var/lib/mysql
+    networks:
+      - default
     env_file: mysql.env
+
+networks:
+  default:

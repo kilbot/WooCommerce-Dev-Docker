@@ -20,6 +20,10 @@ services:
     expose:
       - "80"
       - "443"
+    networks:
+      default:
+        aliases:
+          - php56.local
     env_file: ../.env
 
   php56:
@@ -36,7 +40,9 @@ services:
     depends_on:
       - mysql57
     extra_hosts:
-      - "php56.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
+    networks:
+      - default
     env_file:
       - wordpress.env
       - ../.env
@@ -49,4 +55,6 @@ services:
       - "9017:3306"
     volumes:
       - ../.data/mysql57:/var/lib/mysql
+    networks:
+      - default
     env_file: mysql.env

@@ -17,8 +17,7 @@ RUN { \
   echo 'xdebug.remote_enable=1'; \
   echo 'xdebug.remote_autostart=1'; \
   echo 'xdebug.remote_port=9000'; \
-  echo 'xdebug.remote_host=172.22.0.1'; \
-  echo 'xdebug.idekey=PHPSTORM'; \
+  echo 'xdebug.remote_host=remote_host'; \
 } > /usr/local/etc/php/conf.d/xdebug.ini
 
 # install composer

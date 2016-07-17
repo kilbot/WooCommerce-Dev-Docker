@@ -41,6 +41,7 @@ services:
       - mysql57
     extra_hosts:
       - "php54.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
     env_file: wordpress.env
 
   php55:
@@ -60,6 +61,7 @@ services:
       - mysql57
     extra_hosts:
       - "php55.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
     env_file: wordpress.env
 
   php56:
@@ -79,6 +81,7 @@ services:
       - mysql57
     extra_hosts:
       - "php56.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
     env_file: wordpress.env
 
   php70:
@@ -98,6 +101,7 @@ services:
       - mysql57
     extra_hosts:
       - "php70.local:172.22.0.1"
+      - "remote_host:${XDEBUG_REMOTE_HOST}"
     env_file: wordpress.env
 
   mysql56:
