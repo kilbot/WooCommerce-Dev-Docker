@@ -26,7 +26,7 @@ fi
 if ! $(wp core is-installed --allow-root); then
   wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   wp plugin install wordpress-importer --allow-root --activate
-  if [[ $WC_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
+  if [ $WC_VERSION != "latest" ]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
