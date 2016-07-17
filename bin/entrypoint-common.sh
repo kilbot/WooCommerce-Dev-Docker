@@ -2,9 +2,11 @@
 set -e
 
 # env variables
-WP_VERSION=${WP_VERSION-latest}
-WC_VERSION=${WC_VERSION-latest}
-PROJECT_NAME=${PROJECT_NAME-project}
+PROJECT_NAME=${PROJECT_NAME:=project}
+
+WP_VERSION=${WP_VERSION:=latest}
+WP_MULTISITE=${WP_MULTISITE:=0}
+WC_VERSION=${WC_VERSION:=latest}
 
 # install wordpress
 if ! [ -e index.php -a -e wp-includes/version.php ]; then
