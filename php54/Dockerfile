@@ -8,7 +8,7 @@ ADD https://raw.githubusercontent.com/kilbot/WooCommerce-Dev-Docker/master/bin/e
 RUN apt-get update \
   && apt-get install -y --no-install-recommends unzip subversion \
   && rm -rf /var/lib/apt/lists/* \
-  && pecl install xdebug \
+  && pecl install xdebug-2.4.1 \
   && docker-php-ext-enable xdebug \
   && docker-php-ext-install mysqli
 
