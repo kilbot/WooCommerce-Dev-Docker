@@ -19,13 +19,14 @@ if [ ! -e wp-config.php ]; then
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'SCRIPT_DEBUG', true );
-define( 'WP_HOME', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION .'.local' );
-define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION .'.local' );
+define( 'WP_HOME', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT' );
+define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT');
 PHP
 fi
 
 # set up db & plugins
-if ! $(wp core is-installed --allow-root); then
+# if ! $(wp core is-installed --allow-root); then
+if ! [ -e index.php -a -e wp-includes/version.php ]; then
 
   # install WordPress
   if [ $WP_MULTISITE = "1" ]; then
@@ -33,24 +34,25 @@ if ! $(wp core is-installed --allow-root); then
   else
     wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   fi
+fi
 
-  # install WooCommerce
+# install WooCommerce
+if ! [ -e wp-content/plugins/woocommerce.php ]; then
+
   if [ $WC_VERSION != "latest" ]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
   fi
 
-  # activate the current project
-  wp plugin activate $PROJECT_NAME --allow-root
-
   wp plugin install wordpress-importer --allow-root --activate
-  wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --skip=attachment --authors=create
+  wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --authors=create
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root
   wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
   wp plugin deactivate wordpress-importer --allow-root
-#  wp rewrite flush --hard --allow-root
+  # wp rewrite flush --hard --allow-root
+
 fi
 
 # install unit test library
@@ -69,3 +71,5 @@ if [ ! -f wordpress-tests-lib/wp-tests-config.php ]; then
   sed -i "s/yourpasswordhere/$WORDPRESS_DB_PASSWORD/" wordpress-tests-lib/wp-tests-config.php
   sed -i "s|localhost|${WORDPRESS_DB_HOST}|" wordpress-tests-lib/wp-tests-config.php
 fi
+
+exec "$@"
