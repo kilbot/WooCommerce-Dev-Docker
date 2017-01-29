@@ -33,9 +33,11 @@ See [Docker.com](https://www.docker.com/products/docker) for more information.
 
 To be able to avoid conflicts when lauching multiple _docker composition_ docker-compose relies on 3 mechanisms:
 
-- if you don't care about project name because you will only launch ONE docker-compose stack, then don't use anything ^^
+- if you don't care about project name because you will only launch ONE docker-compose stack, then don't use anything 
 - if you simply need to set a project name to preprend the name of your containers, use the -p option: `docker-compose -p my-project-name -f .docker docker.yml up -d`
 - if you need to set the project name to preprend the name of your container AND you need to access the project name inside the docker-compose file, via ${COMPOSE_PROJECT_NAME} then you should use export the ENV variable COMPOSE_PROJECT_NAME.
+
+If you don't specify -p option, docker-compose looks for an environment varaible named COMPOSE_PROJECT_NAME, and if it's empty, it defaults to the current working directory.
 
 see: https://github.com/docker/compose/issues/3431#issuecomment-221291167
 

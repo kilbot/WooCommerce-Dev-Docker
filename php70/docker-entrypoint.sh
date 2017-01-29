@@ -2,7 +2,7 @@
 set -e
 
 # env variables
-PROJECT_NAME=${PROJECT_NAME:=project}
+PROJECT_NAME=${COMPOSE_PROJECT_NAME:=project}
 
 WP_VERSION=${WP_VERSION:=latest}
 WP_MULTISITE=${WP_MULTISITE:=0}
@@ -19,8 +19,8 @@ if [ ! -e wp-config.php ]; then
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'SCRIPT_DEBUG', true );
-define( 'WP_HOME', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT' );
-define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT');
+define( 'WP_HOME', 'http://$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT' );
+define( 'WP_SITEURL', 'http://$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT');
 PHP
 fi
 
