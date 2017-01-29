@@ -56,7 +56,8 @@ services:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${COMPOSE_PROJECT_NAME}
     depends_on:
-      - db-mysql57
+      db-mysql57:
+        condition: service_healthy
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
@@ -78,6 +79,14 @@ services:
     networks:
       - default
     env_file: mysql.env
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "mysql --protocol=socket -hlocalhost -uroot -p$MYSQL_ROOT_PASSWORD -e 'SELECT 1'",
+      ]
+      interval: 1s
+      timeout: 10s
+      retries: 20
 
   db-mysql57:
     build: ./mysql57
@@ -90,6 +99,14 @@ services:
     networks:
       - default
     env_file: mysql.env
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "mysql --protocol=socket -hlocalhost -uroot -p$MYSQL_ROOT_PASSWORD -e 'SELECT 1'",
+      ]
+      interval: 1s
+      timeout: 10s
+      retries: 20
 
 networks:
   default:

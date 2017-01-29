@@ -8,7 +8,7 @@ WP_VERSION=${WP_VERSION:=latest}
 WP_MULTISITE=${WP_MULTISITE:=0}
 WC_VERSION=${WC_VERSION:=latest}
 
-# install wordpress
+# download wordpress
 if ! [ -e index.php -a -e wp-includes/version.php ]; then
   wp core download --allow-root --version=$WP_VERSION
 fi
@@ -24,16 +24,21 @@ define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.$L
 PHP
 fi
 
-# set up db & plugins
-# if ! $(wp core is-installed --allow-root); then
-if ! [ -e index.php -a -e wp-includes/version.php ]; then
+########
+## install WordPress (set up db)
+## & plugins (woocommerce)
+#######
 
-  # install WordPress
+# install WordPress
+if ! $(wp core is-installed --allow-root); then
+# if ! [ -e index.php -a -e wp-includes/version.php ]; then
+  echo 'WP IS NOT INSTALLED ... installing ...'
   if [ $WP_MULTISITE = "1" ]; then
     wp core multisite-install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   else
     wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   fi
+
 fi
 
 # install WooCommerce
