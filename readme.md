@@ -29,20 +29,21 @@ See [Docker.com](https://www.docker.com/products/docker) for more information.
 `$ docker rm $(docker ps -a -q)`   
 `$ docker rmi $(docker images -q)`
 
-#### Using a COMPOSE_PROJECT_NAME
+#### Project name
 
-To be able to avoid conflicts when lauching multiple _docker composition_ docker-compose relies on 3 mechanisms:
+Each project using this docker setup must have a Project name. It will be used by the setup to avoid conflicts when lauching multiple _docker composition_.
 
-- if you don't care about project name because you will only launch ONE docker-compose stack, then don't use anything 
-- if you simply need to set a project name to preprend the name of your containers, use the -p option: `docker-compose -p my-project-name -f .docker docker.yml up -d`
-- if you need to set the project name to preprend the name of your container AND you need to access the project name inside the docker-compose file, via ${COMPOSE_PROJECT_NAME} then you should use export the ENV variable COMPOSE_PROJECT_NAME.
+You define a `COMPOSE_PROJECT_NAME` _env variable_ in a docker-compose `.env` file and can use the `.env.example` file as an example.
 
-If you don't specify -p option, docker-compose looks for an environment varaible named COMPOSE_PROJECT_NAME, and if it's empty, it defaults to the current working directory.
+You can then run `docker-compose -f .docker docker.yml up -d` from the `.docker` directory.
+If the `.env` file comes with the project and is located at the project's root you runthe command from the root directory and adjust the location of the `docker.yml` file.
 
-see: https://github.com/docker/compose/issues/3431#issuecomment-221291167
+#### Local development domain name
 
-The docker compose file will use a `COMPOSE_PROJECT_NAME` _env variable_ if it can find one  
+In the same `.env` file you can set a `LOCALHOST_DOMAIN` that wil be used as a base for your local development domain name for the project.
 
-Typically you will have a `.env` file in the project root from where you will execute:  
+The complete domain name consists of the version of php the setup uses as a subdomain to your base domain name.
+e.g. For the base setup using a php56 container to serve the app and a `LOCALHOST_DOMAIN` set to `odysseus.dev` the domain to add to your `hosts` file will be:
+`php56.odysseus.dev`
 
-`docker-compose -f .docker docker.yml up -d`
+
