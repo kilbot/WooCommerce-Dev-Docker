@@ -18,9 +18,7 @@ services:
       - "80"
       - "443"
     networks:
-      default:
-        aliases:
-          - php70.${LOCALHOST_DOMAIN}
+      - default
     env_file: ../.env
 
   app-php56:
@@ -43,7 +41,7 @@ services:
       - wordpress.env
       - ../.env
     environment:
-      WORDPRESS_DB_HOST: "${COMPOSE_PROJECT_NAME}-db-mysql57:3306"
+      WORDPRESS_DB_HOST: "${COMPOSE_PROJECT_NAME}-db-mysql56:3306"
 
   db-mysql56:
     build: ./mysql56
@@ -61,7 +59,7 @@ services:
         "CMD-SHELL",
         "mysql --protocol=socket -hlocalhost -uroot -p$MYSQL_ROOT_PASSWORD -e 'SELECT 1'",
       ]
-      interval: 1s
+      interval: 2s
       timeout: 10s
       retries: 20
 
