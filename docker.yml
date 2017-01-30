@@ -13,7 +13,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/includes:/etc/nginx/conf.d/includes
     depends_on:
-      - app-php70
+      - app-php56
     expose:
       - "80"
       - "443"
@@ -33,7 +33,7 @@ services:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${COMPOSE_PROJECT_NAME}
     depends_on:
-      db-mysql57:
+      db-mysql56:
         condition: service_healthy
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"

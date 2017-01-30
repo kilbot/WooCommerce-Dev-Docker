@@ -19,8 +19,8 @@ if [ ! -e wp-config.php ]; then
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'SCRIPT_DEBUG', true );
-define( 'WP_HOME', 'http://$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT' );
-define( 'WP_SITEURL', 'http://$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT');
+define( 'WP_HOME', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT' );
+define( 'WP_SITEURL', 'http://php'. PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '$LOCALHOST_DOMAIN:$LOCALHOST_HTTP_PORT');
 PHP
 fi
 
@@ -31,7 +31,7 @@ fi
 
 # install WordPress
 if ! $(wp core is-installed --allow-root); then
-# if ! [ -e index.php -a -e wp-includes/version.php ]; then
+
   echo 'WP IS NOT INSTALLED ... installing ...'
   if [ $WP_MULTISITE = "1" ]; then
     wp core multisite-install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
