@@ -23,12 +23,12 @@ services:
           - php70.${LOCALHOST_DOMAIN}
     env_file: ../.env
 
-  app-php70:
-    build: ./php70
-    container_name: ${COMPOSE_PROJECT_NAME}-app-php70
+  app-php56:
+    build: ./php56
+    container_name: ${COMPOSE_PROJECT_NAME}-app-php56
     restart: always
     ports:
-      - "${LOCALHOST_PHP70_PORT:-9070}:9000"
+      - "${LOCALHOST_PHP56_PORT:-9056}:9000"
     volumes:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${COMPOSE_PROJECT_NAME}
@@ -45,14 +45,14 @@ services:
     environment:
       WORDPRESS_DB_HOST: "${COMPOSE_PROJECT_NAME}-db-mysql57:3306"
 
-  db-mysql57:
-    build: ./mysql57
-    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql57
+  db-mysql56:
+    build: ./mysql56
+    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql56
     restart: always
     ports:
-      - "${LOCALHOST_MYSQL57_PORT:-9017}:3306"
+      - "${LOCALHOST_MYSQL56_PORT:-9016}:3306"
     volumes:
-      - ../.data/mysql57:/var/lib/mysql
+      - ../.data/mysql56:/var/lib/mysql
     networks:
       - default
     env_file: mysql.env

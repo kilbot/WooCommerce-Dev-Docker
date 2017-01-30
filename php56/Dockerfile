@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:5.6-fpm
 
 # install the PHP extensions we need
 RUN apt-get update \
