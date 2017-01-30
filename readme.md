@@ -35,8 +35,8 @@ Each project using this docker setup must have a Project name. It will be used b
 
 You define a `COMPOSE_PROJECT_NAME` _env variable_ in a docker-compose `.env` file and can use the `.env.example` file as an example.
 
-You can then run `docker-compose -f .docker docker.yml up -d` from the `.docker` directory.
-If the `.env` file comes with the project and is located at the project's root you runthe command from the root directory and adjust the location of the `docker.yml` file.
+You can then run `docker-compose -f docker.yml up -d` from the `.docker` directory to launch the containers.
+If the `.env` file comes with the project and is located at the project's root you can run the command from the root directory and adjust the location of the `docker.yml` file to `.docker/docker.yml`.
 
 #### Local development domain name
 
