@@ -4,7 +4,7 @@
 
 ### Requirements
 
-* Docker >= 1.8.3
+* Docker >= 1.12
 * Docker Compose
 
 See [Docker.com](https://www.docker.com/products/docker) for more information.
