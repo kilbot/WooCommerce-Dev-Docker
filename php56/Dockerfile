@@ -26,7 +26,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --in
   && composer global require guzzlehttp/guzzle:5
 
 # install phpunit
-RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar \
+RUN curl https://phar.phpunit.de/phpunit-5.7.phar -L > phpunit.phar \
   && chmod +x phpunit.phar \
   && mv phpunit.phar /usr/local/bin/phpunit \
   && phpunit --version
