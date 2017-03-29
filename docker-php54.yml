@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 services:
   static:
     build: ./nginx
@@ -10,10 +10,10 @@ services:
     volumes:
       - ../.html:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/wp-content/plugins/${PROJECT_NAME}
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/php54.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/includes:/etc/nginx/conf.d/includes
     depends_on:
-      - app-php56
+      - app-php54
     expose:
       - "80"
       - "443"
@@ -26,13 +26,12 @@ services:
     container_name: ${PROJECT_NAME}-app-php54
     restart: always
     ports:
-      - "${LOCALHOST_PHP56_PORT:-9054}:9000"
+      - "${LOCALHOST_PHP54_PORT:-9054}:9000"
     volumes:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
     depends_on:
-      db-mysql56:
-        condition: service_healthy
+      - db-mysql56
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
@@ -40,28 +39,18 @@ services:
     env_file:
       - wordpress.env
       - ../.env
-    environment:
-      WORDPRESS_DB_HOST: "${PROJECT_NAME}-db-mysql54:3306"
 
   db-mysql56:
     build: ./mysql56
     container_name: ${PROJECT_NAME}-db-mysql56
     restart: always
     ports:
-      - "${LOCALHOST_MYSQL54_PORT:-9016}:3306"
+      - "${LOCALHOST_MYSQL56_PORT:-9016}:3306"
     volumes:
       - ../.data/mysql56:/var/lib/mysql
     networks:
       - default
     env_file: mysql.env
-    healthcheck:
-      test: [
-        "CMD-SHELL",
-        "mysql --protocol=socket -hlocalhost -uroot -p$MYSQL_ROOT_PASSWORD -e 'SELECT 1'",
-      ]
-      interval: 2s
-      timeout: 10s
-      retries: 20
 
 networks:
   default:

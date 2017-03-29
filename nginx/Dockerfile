@@ -1,8 +1,4 @@
 FROM nginx
-ARG PHP_VERSION=*
-
-COPY $PHP_VERSION.conf /etc/nginx/conf.d/
-COPY includes/*.conf /etc/nginx/conf.d/includes/
 
 # generate self signed ssl cert
 RUN mkdir /etc/nginx/ssl \
