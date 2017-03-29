@@ -10,7 +10,7 @@ services:
     volumes:
       - ../.html:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/wp-content/plugins/${PROJECT_NAME}
-      - ./nginx/default.conf:/etc/nginx/conf.d/php70.conf
+      - ./nginx/php70.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/includes:/etc/nginx/conf.d/includes
     depends_on:
       - app-php70
@@ -31,23 +31,23 @@ services:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
     depends_on:
-      - db-mysql57
+      - db-mysql56
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
     env_file:
-      - wordpress-mysql57.env
+      - wordpress.env
       - ../.env
 
-  db-mysql57:
-    build: ./mysql57
-    container_name: ${PROJECT_NAME}-db-mysql57
+  db-mysql56:
+    build: ./mysql56
+    container_name: ${PROJECT_NAME}-db-mysql56
     restart: always
     ports:
-      - "${LOCALHOST_MYSQL57_PORT:-9017}:3306"
+      - "${LOCALHOST_MYSQL56_PORT:-9016}:3306"
     volumes:
-      - ../.data/mysql57:/var/lib/mysql
+      - ../.data/mysql56:/var/lib/mysql
     networks:
       - default
     env_file: mysql.env
