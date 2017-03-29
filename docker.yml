@@ -1,84 +1,38 @@
-version: '2'
+version: '2.1'
 services:
-  nginx:
+  static:
     build: ./nginx
-    container_name: nginx
+    container_name: ${PROJECT_NAME}-static
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "${LOCALHOST_HTTP_PORT:-80}:80"
+      - "${LOCALHOST_HTTPS_PORT:-443}:443"
     volumes:
       - ../.html:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/wp-content/plugins/${PROJECT_NAME}
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/includes:/etc/nginx/conf.d/includes
     depends_on:
-      - php54
-      - php55
-      - php56
-      - php70
+      - app-php56
     expose:
       - "80"
       - "443"
     networks:
-      default:
-        aliases:
-          - php54.local
-          - php55.local
-          - php56.local
-          - php70.local
+      - default
     env_file: ../.env
 
-  php54:
-    build: ./php54
-    container_name: php54
-    restart: always
-    ports:
-      - "9054:9000"
-    volumes:
-      - ../.html:/var/www/html
-      - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
-    depends_on:
-      - mysql56
-      - mysql57
-    extra_hosts:
-      - "remote_host:${XDEBUG_REMOTE_HOST}"
-    networks:
-      - default
-    env_file:
-      - wordpress.env
-      - ../.env
-
-  php55:
-    build: ./php55
-    container_name: php55
-    restart: always
-    ports:
-      - "9055:9000"
-    volumes:
-      - ../.html:/var/www/html
-      - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
-    depends_on:
-      - mysql56
-      - mysql57
-    extra_hosts:
-      - "remote_host:${XDEBUG_REMOTE_HOST}"
-    networks:
-      - default
-    env_file:
-      - wordpress.env
-      - ../.env
-
-  php56:
+  app-php56:
     build: ./php56
-    container_name: php56
+    container_name: ${PROJECT_NAME}-app-php56
     restart: always
     ports:
-      - "9056:9000"
+      - "${LOCALHOST_PHP56_PORT:-9056}:9000"
     volumes:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
     depends_on:
-      - mysql56
-      - mysql57
+      db-mysql56:
+        condition: service_healthy
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
@@ -86,50 +40,28 @@ services:
     env_file:
       - wordpress.env
       - ../.env
+    environment:
+      WORDPRESS_DB_HOST: "${PROJECT_NAME}-db-mysql56:3306"
 
-  php70:
-    build: ./php70
-    container_name: php70
-    restart: always
-    ports:
-      - "9070:9000"
-    volumes:
-      - ../.html:/var/www/html
-      - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
-    depends_on:
-      - mysql56
-      - mysql57
-    extra_hosts:
-      - "remote_host:${XDEBUG_REMOTE_HOST}"
-    networks:
-      - default
-    env_file:
-      - wordpress.env
-      - ../.env
-
-  mysql56:
+  db-mysql56:
     build: ./mysql56
-    container_name: mysql56
+    container_name: ${PROJECT_NAME}-db-mysql56
     restart: always
     ports:
-      - "9016:3306"
+      - "${LOCALHOST_MYSQL56_PORT:-9016}:3306"
     volumes:
       - ../.data/mysql56:/var/lib/mysql
     networks:
       - default
     env_file: mysql.env
-
-  mysql57:
-    build: ./mysql57
-    container_name: mysql57
-    restart: always
-    ports:
-      - "9017:3306"
-    volumes:
-      - ../.data/mysql57:/var/lib/mysql
-    networks:
-      - default
-    env_file: mysql.env
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "mysql --protocol=socket -hlocalhost -uroot -p$MYSQL_ROOT_PASSWORD -e 'SELECT 1'",
+      ]
+      interval: 2s
+      timeout: 10s
+      retries: 20
 
 networks:
   default:
