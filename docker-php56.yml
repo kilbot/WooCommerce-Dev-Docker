@@ -31,7 +31,7 @@ services:
       - ../.html:/var/www/html
       - ../:/var/www/html/wp-content/plugins/${PROJECT_NAME}
     depends_on:
-      - db-mysql56
+      - db-mysql57
     extra_hosts:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
@@ -40,14 +40,14 @@ services:
       - wordpress.env
       - ../.env
 
-  db-mysql56:
-    build: ./mysql56
-    container_name: ${PROJECT_NAME}-db-mysql56
+  db-mysql57:
+    build: ./mysql57
+    container_name: ${PROJECT_NAME}-db-mysql57
     restart: always
     ports:
-      - "${LOCALHOST_MYSQL56_PORT:-9016}:3306"
+      - "${LOCALHOST_MYSQL57_PORT:-9017}:3306"
     volumes:
-      - ../.data/mysql56:/var/lib/mysql
+      - ../.data/mysql57:/var/lib/mysql
     networks:
       - default
     env_file: mysql.env
