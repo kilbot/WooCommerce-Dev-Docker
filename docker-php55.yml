@@ -18,7 +18,9 @@ services:
       - "80"
       - "443"
     networks:
-      - default
+      default:
+        aliases:
+          - php55.local
     env_file: ../.env
 
   app-php55:
