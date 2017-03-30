@@ -45,7 +45,7 @@ if ! $(wp core is-installed --allow-root); then
   wp plugin activate $PROJECT_NAME --allow-root
 
   wp plugin install wordpress-importer --allow-root --activate
-  wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --skip=attachment --authors=create
+  wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --authors=create
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root
   wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
