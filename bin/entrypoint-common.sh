@@ -34,8 +34,10 @@ if ! $(wp core is-installed --allow-root); then
     wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   fi
 
-  # install WooCommerce
-  if [ $WC_VERSION != "latest" ]; then
+  # install WooCommerce: url, version, latest
+  if [ $WC_VERSION == http* ]; then
+    wp plugin install $WC_VERSION --allow-root
+  else if [ $WC_VERSION != "latest" ]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
