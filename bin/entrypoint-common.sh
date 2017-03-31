@@ -40,7 +40,7 @@ if ! $(wp core is-installed --allow-root); then
 
   # install WooCommerce: url, version, latest
   if [[ $WC_VERSION == http* ]]; then
-    wp plugin install $WC_VERSION --allow-root
+    wp plugin install $WC_VERSION --allow-root --activate
   elif [[ $WC_VERSION != "latest" ]]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
