@@ -32,16 +32,16 @@ fi
 if ! $(wp core is-installed --allow-root); then
 
   # install WordPress
-  if [ $WP_MULTISITE = "1" ]; then
+  if [[ $WP_MULTISITE == "1" ]]; then
     wp core multisite-install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   else
     wp core install --allow-root --url=localhost --title=Localhost --admin_user=admin --admin_password=password --admin_email=email@example.com
   fi
 
   # install WooCommerce: url, version, latest
-  if [ $WC_VERSION == http* ]; then
+  if [[ $WC_VERSION == http* ]]; then
     wp plugin install $WC_VERSION --allow-root
-  elif [ $WC_VERSION != "latest" ]; then
+  elif [[ $WC_VERSION != "latest" ]]; then
     wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
   else
     wp plugin install woocommerce --allow-root --activate
