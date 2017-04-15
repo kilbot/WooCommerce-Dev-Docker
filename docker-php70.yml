@@ -38,6 +38,10 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
+    environment: 
+      - WP_VERSION=${WP_VERSION}
+      - WP_MULTISITE=${WP_MULTISITE}
+      - WC_VERSION=${WC_VERSION}
     env_file:
       - wordpress.env
       - ../.env
