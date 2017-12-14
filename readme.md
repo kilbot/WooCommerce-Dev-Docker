@@ -9,7 +9,11 @@
 
 See [Docker.com](https://www.docker.com/products/docker) for more information.
 
-### Useful commands
+### Getting Started
+
+copy .env.example to .env
+
+`$ cp .env.example .env`
 
 #### Start
 `$ docker-compose up -d`
@@ -26,12 +30,12 @@ See [Docker.com](https://www.docker.com/products/docker) for more information.
 #### Remove all docker containers and images
 > Only execute if you know what you are doing!
 
-`$ docker rm $(docker ps -a -q)`   
+`$ docker rm $(docker ps -a -q)`
 `$ docker rmi $(docker images -q)`
 
 ### Windows users
 
-If you clone this repository on a Windows machine the files will be saved with hidden Windows characters. This will produce an `exec user process caused "no such file or directory"` error with the `docker-entrypoint.sh` files. To fix this error you will need to run the `dos2unix` command on each `docker-entrypoint.sh` file. You will also need to rebuild the docker containers, eg: 
+If you clone this repository on a Windows machine the files will be saved with hidden Windows characters. This will produce an `exec user process caused "no such file or directory"` error with the `docker-entrypoint.sh` files. To fix this error you will need to run the `dos2unix` command on each `docker-entrypoint.sh` file. You will also need to rebuild the docker containers, eg:
 
 ```
 $ docker-compose -f docker.yml kill
