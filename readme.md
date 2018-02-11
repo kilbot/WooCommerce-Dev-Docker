@@ -34,8 +34,8 @@ See [Docker.com](https://www.docker.com/products/docker) for more information.
 If you clone this repository on a Windows machine the files will be saved with hidden Windows characters. This will produce an `exec user process caused "no such file or directory"` error with the `docker-entrypoint.sh` files. To fix this error you will need to run the `dos2unix` command on each `docker-entrypoint.sh` file. You will also need to rebuild the docker containers, eg: 
 
 ```
-$ npm run stop
+$ docker-compose -f docker.yml kill
 $ for /f "delims=" %a in ('dir docker-entrypoint.sh /b /s') do dos2unix %a
-$ docker-compose -f .docker/docker.yml build
-$ npm run start
+$ docker-compose -f docker.yml build
+$ docker-compose -f docker.yml up -d
 ```
