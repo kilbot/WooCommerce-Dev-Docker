@@ -52,11 +52,11 @@ if ! $(wp core is-installed --allow-root); then
 
   wp plugin install wordpress-importer --allow-root --activate
   
-  # legacy dummy-data folder
-  wp import $(wp plugin path --allow-root)/woocommerce/dummy-data/dummy-data.xml --allow-root --authors=create
+  # legacy dummy-data
+  wp import https://raw.githubusercontent.com/woocommerce/woocommerce/3.2.6/dummy-data/dummy-data.xml --allow-root --authors=create
   
-  # WC3.3 or higher
-  wp import $(wp plugin path --allow-root)/woocommerce/sample-data/sample_products.xml --allow-root --authors=create
+  # WC3.3 or higher uses new data
+  # wp import $(wp plugin path --allow-root)/woocommerce/sample-data/sample_products.xml --allow-root --authors=create
   
   wp option update woocommerce_api_enabled yes --allow-root
   wp option update woocommerce_calc_taxes yes --allow-root
