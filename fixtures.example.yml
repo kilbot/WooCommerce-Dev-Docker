@@ -1,0 +1,43 @@
+Hellonico\Fixtures\Entity\Product:
+  product{1..2}:
+    name: '<productName()>'
+    type: '<randomElement(["simple", "grouped", "variable"])>'
+    status: '<randomElement(["draft", "pending", "private", "publish"])>'
+    featured: '<randomElement([0, 1])>'
+    catalog_visibility: '<randomElement(["visible", "catalog", "search", "hidden"])>'
+    description: '<paragraphs(5, true)>'
+    short_description: '<paragraphs(1, true)>'
+    sku: '<ean13()>'
+    regular_price: '<productPrice()>'
+    sale_price: '<productPrice()>'
+    date_on_sale_from: '<dateTimeBetween("-1 year", "now")>'
+    date_on_sale_from_gmt: '$date_on_sale_from'
+    date_on_sale_to: '<dateTimeBetween("now", "1 year")>'
+    date_on_sale_to_gmt: '$date_on_sale_to'
+    virtual: '<randomElement([0, 1])>'
+    downloadable: '<randomElement([0, 1])>'
+#    downloads:
+    download_limit: '<numberBetween(1, 10)>'
+    download_expiry: '<numberBetween(-1, 1000)>'
+    tax_status: '<randomElement(["taxable", "shipping", "none"])>'
+    tax_class: '<randomElement(["standard", "local"])>'
+    manage_stock: '<randomElement([0, 1])>'
+    stock_quantity: '<numberBetween(1, 100)>'
+#    in_stock:
+    backorders: '<randomElement(["yes", "no", "notify"])>'
+    sold_individually: '<randomElement([0, 1])>'
+    weight: '<numberBetween(1, 100)>'
+#    dimensions:
+#    shipping_class:
+#    reviews_allowed:
+#    upsell_ids:
+#    cross_sell_ids:
+#    parent_id:
+#    purchase_note:
+#    categories:
+#    tags:
+#    images:
+#    attributes:
+#    default_attributes:
+#    menu_order:
+#    meta_data:
