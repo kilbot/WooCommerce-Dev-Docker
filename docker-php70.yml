@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+
   static:
     build: ./nginx
     container_name: ${PROJECT_NAME}-static
@@ -62,4 +63,3 @@ services:
 
 networks:
   default:
-  
