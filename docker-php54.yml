@@ -38,7 +38,7 @@ services:
       - "remote_host:${XDEBUG_REMOTE_HOST}"
     networks:
       - default
-    environment: 
+    environment:
       - WP_VERSION=${WP_VERSION}
       - WP_MULTISITE=${WP_MULTISITE}
       - WC_VERSION=${WC_VERSION}
@@ -56,7 +56,9 @@ services:
       - ../.data/mysql57:/var/lib/mysql
     networks:
       - default
-    env_file: mysql.env
+    env_file:
+      - mysql.env
+      - ../.env
 
 networks:
   default:
