@@ -3,33 +3,27 @@
 
 ## Overview
 
-This docker-compose environment allows you to run concomitantly a matrix of PHP, MySQL, WordPress and WooCommerce versions.
+This docker-compose environment allows you to run a matrix of PHP, MySQL, WordPress and WooCommerce configurations, for example:
 
-| PHP |  MySQL  | WordPress | WooCommerce | Multisite |
-|-----|---------|-----------|-------------|-----------|
-| 5.4 |   5.6   |    4.7    |    3.2.6    |     0     |
-| 5.5 |   5.7   |    4.8    |    3.3.5    |     1     |
-| 5.6 |   8.0   |   latest  |    3.3.4    |           |
-| 7.0 | mariadb |  nightly  |    latest   |           |
-| 7.2 |         |           |  http://url |           |
+| PHP | MySQL | WordPress |   WooCommerce   | Multisite |
+|-----|-------|-----------|-----------------|-----------|
+| 5.4 |  5.6  |    4.7    |      3.2.6      |     0     |
+| 5.5 |  5.7  |    4.8    |      3.3.5      |     1     |
+| 5.6 |  8.0  |   latest  |      3.4.4      |           |
+| 7.0 |       |  nightly  |      latest     |           |
+| 7.2 |       |           | http://beta.url |           |
 
 ## Requirements
 
 * Docker >= 1.8.3
 * Docker Compose
-* git
 
 See [Docker.com](https://www.docker.com/products/docker) for more information. You can install Docker directly from [Docker installation page](https://docs.docker.com/engine/installation/)
 
 
 ## Getting Started
 
-Follow bellow steps to get all running.
-
-
-### Setup
-
-1. Make a new project folder and clone the WooCommerce Development Docker repository:
+1. Make a new project folder and clone (or download) the WooCommerce Development Docker repository:
 ```bash
 mkdir my-plugin && cd my-plugin
 git clone https://github.com/kilbot/WooCommerce-Dev-Docker.git ./docker
@@ -52,56 +46,61 @@ my-plugin/
 +-- readme.txt
 ```
 
-2. Find your hosts file, `Mac: /private/etc/hosts`, `Linux:/etc/hosts` or `Win:\Windows\System32\Drivers\etc\hosts` and add the aliases below:
-```
-127.0.0.1 php54.local
-127.0.0.1 php55.local
-127.0.0.1 php56.local
-127.0.0.1 php70.local
-127.0.0.1 mysql56.local
-127.0.0.1 mysql57.local
-```
-
 3. Start containers
 ```bash
-$ ./compose.sh up -d
+$ docker-compose -f .docker/docker.yml up -d
 ```
 
-4. Go to `http://php72.local/wp-admin` and access your development site with the following credientials:
+4. Go to `https://localhost/wp-admin/admin.php?page=wc-status` and check your development environment with the following credientials:
 ```
 user: admin
 password: password
 ```
 
 **Note:** The first build may take some time to complete. If you can not access the site, try again after 5-10 minutes.
-    
-### Configuration
 
-In `.env` file there are commented out environment variables named `LOCALHOST_PHPXX_PORT` where `XX` is the PHP version. 
 
-These variables are being assigned with a PORT number to setup the HTTP listening port for each container. 
+## Configuration
 
-There are `LOCALHOST_HTTP_PORT` and `LOCALHOST_HTTPS_PORT` variables for setup nginx load balancer listening ports also, and `LOCALHOST_MYSQL56_PORT` and `LOCALHOST_MYSQL57_PORT` for each mysql version.
+The `.env` file contains the default settings for the docker containers. 
+
+Dummy data is created using the `fixtures.yml` template. 
 
 
 ## Docker compose management
 
-The `compose.sh` file is a wrapper to `docker-compose` command pointing to all docker-compose files needed to run all versions at the same time, so all docker-compose command variants are accepted by `compose.sh`.
-
 ### Start
-`$ ./compose.sh up -d`
+```bash
+$ docker-compose -f .docker/docker.yml up -d
+or
+$ docker-compose -f .docker/docker.yml up -d --PHP_VERSION=5.6 --MYSQL_VERSION=5.7 --WP_VERSION=4.8 --WC_VERSION=3.4.4 --WP_MULTISITE=1
+```
 
 ### Shut down
-`$ ./compose.sh kill`
+```bash
+$ docker-compose -f .docker/docker.yml kill
+or
+$ docker-compose -f .docker/docker.yml kill --PHP_VERSION=5.6 --MYSQL_VERSION=5.7 --WP_VERSION=4.8 --WC_VERSION=3.4.4 --WP_MULTISITE=1
+```
 
-### List containers
-`$ ./compose.sh ps`
+### List active containers
+```bash
+$ docker ps
+```
 
 ### Open container bash
-`$ ./compose.sh run nginx /bin/bash`
+```bash
+$ docker exec -it <CONTAINER ID or CONTAINER NAME> bash
+```
 
-### Remove all docker containers and images
-> Only execute if you know what you are doing!
+### Purge all docker containers and images
+```bash
+$ docker system purge -fa
+or
+$ docker system prune -fa
+```
 
-Linux & Mac: `$ docker system purge -fa`
-Win: `$ docker system prune -fa`
+### Purge data and html folders
+```bash
+$ rm -rf .data && rm -rf .html
+```
