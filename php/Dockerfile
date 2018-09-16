@@ -21,15 +21,25 @@ RUN if [ "$PHP_VERSION" -lt "7.0" ]; then \
 
 ## copy files from repository to container
 COPY php/entrypoint.sh /entrypoint.sh
+COPY wp-cli.template.yml /wp-cli.template.yml
 COPY fixtures.example.yml /fixtures.yml
 
 ## install the PHP extensions we need
 RUN apt-get update \
   && apt-get install -y --no-install-recommends unzip subversion dos2unix \
   && rm -rf /var/lib/apt/lists/* \
-  && pecl install $XDEBUG \
-  && docker-php-ext-enable xdebug \
+#  && pecl install $XDEBUG \
+#  && docker-php-ext-enable xdebug \
   && docker-php-ext-install mysqli
+
+## PHP configuration
+RUN { \
+  echo 'log_errors=1'; \
+  echo 'error_reporting=E_ALL'; \
+  echo 'error_log=/var/www/html/php_error.log'; \
+  echo 'memory_limit=512M'; \
+  echo 'sendmail_path=/usr/sbin/sendmail -S mailhog:1025'; \
+} > /usr/local/etc/php/conf.d/custom.ini
 
 ## xdebug options
 RUN { \
@@ -40,16 +50,16 @@ RUN { \
 } > /usr/local/etc/php/conf.d/xdebug.ini
 
 ## install composer
-ENV PATH /root/.composer/vendor/bin:$PATH
-RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
-  && composer global require guzzlehttp/$GUZZLE
+#ENV PATH /root/.composer/vendor/bin:$PATH
+#RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
+#  && composer global require guzzlehttp/$GUZZLE
 
 ## install phpunit
 ## force PHPUnit to 5.7, version 6 uses namespaces which casuses problems with WP Test Suite
-RUN curl https://phar.phpunit.de/$PHPUNIT.phar -L > phpunit.phar \
-  && chmod +x phpunit.phar \
-  && mv phpunit.phar /usr/local/bin/phpunit \
-  && phpunit --version
+#RUN curl https://phar.phpunit.de/$PHPUNIT.phar -L > phpunit.phar \
+#  && chmod +x phpunit.phar \
+#  && mv phpunit.phar /usr/local/bin/phpunit \
+#  && phpunit --version
 
 ## add wp-cli for use in entrypoint, also fix permissions
 RUN curl -o /usr/local/bin/wp -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \

@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3"
 services:
 
   static:
@@ -7,7 +7,6 @@ services:
       context: ./
       dockerfile: nginx/Dockerfile
     container_name: ${PROJECT_NAME:-my-plugin}-static
-#    restart: always
     ports:
       - "${LOCALHOST_HTTP_PORT:-80}:80"
       - "${LOCALHOST_HTTPS_PORT:-443}:443"
@@ -16,6 +15,7 @@ services:
       - ../:/usr/share/nginx/html/plugins/${PROJECT_NAME:-my-plugin}
     depends_on:
       - php
+    command: /wait-for-it.sh -t 300 php:9000 -- nginx -g 'daemon off;'
     expose:
       - "80"
       - "443"
@@ -37,7 +37,6 @@ services:
         xdebug_remote_host: ${XDEBUG_REMOTE_HOST:-192.168.65.1}
         xdebug_remote_port: ${XDEBUG_REMOTE_PORT:-9000}
     container_name: ${PROJECT_NAME:-my-plugin}-php-${PHP_VERSION:-7.2}
-#    restart: always
     ports:
       - "${LOCALHOST_PHP_PORT:-9001}:9000"
     volumes:
@@ -48,35 +47,58 @@ services:
     networks:
       - default
     environment:
-      - WP_VERSION=${WP_VERSION:-latest}
-      - WC_VERSION=${WC_VERSION:-latest}
-      - WP_MULTISITE=${WP_MULTISITE:-0}
-      - WP_CLI_PACKAGES_DIR=${WP_CLI_PACKAGES_DIR:-/var/www/html}
-      - WP_USER=${WP_USER:-admin}
-      - WP_EMAIL=${WP_EMAIL:-example@example.com}
-      - WP_PASSWORD=${WP_PASSWORD:-password}
-      - WP_TITLE=${WP_TITLE:-Localhost}
-      - WP_URL=${WP_URL:-localhost}
-      - DB_HOST=${DB_HOST:-mysql:3306}
-      - DB_NAME=${DB_NAME:-wordpress}
-      - DB_PASSWORD=${DB_PASSWORD:-wordpress}
+      WP_VERSION: ${WP_VERSION:-latest}
+      WC_VERSION: ${WC_VERSION:-latest}
+      WP_MULTISITE: ${WP_MULTISITE:-0}
+      WP_CLI_PACKAGES_DIR: ${WP_CLI_PACKAGES_DIR:-/var/www/html}
+      WP_USER: ${WP_USER:-admin}
+      WP_EMAIL: ${WP_EMAIL:-example@example.com}
+      WP_PASSWORD: ${WP_PASSWORD:-password}
+      WP_TITLE: ${WP_TITLE:-Localhost}
+      WP_URL: ${WP_URL:-localhost}
+      DB_HOST: ${DB_HOST:-mysql:3306}
+      DB_NAME: ${DB_NAME:-wordpress}
+      DB_PASSWORD: ${DB_PASSWORD:-wordpress}
+      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
     env_file: ../.env
 
   mysql:
-    image: mysql:${MYSQL_VERSION:-5.7}
-    container_name: ${PROJECT_NAME:-my-plugin}-mysql-${MYSQL_VERSION:-5.7}
-#    restart: always
+    image: mysql:${MYSQL_VERSION:-8.0}
+    container_name: ${PROJECT_NAME:-my-plugin}-mysql-${MYSQL_VERSION:-8.0}
     ports:
       - "${LOCALHOST_MYSQL_PORT:-3306}:3306"
     volumes:
-      - ../.data/mysql${MYSQL_VERSION:-5.7}:/var/lib/mysql
+      - ../.data/mysql${MYSQL_VERSION:-8.0}:/var/lib/mysql
       - ./mysql:/etc/mysql/conf.d
     networks:
       - default
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-wordpress}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-wordpress}
     env_file: ../.env
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${PROJECT_NAME:-my-plugin}-phpmyadmin
+    links:
+      - mysql:db
+    ports:
+      - 8092:80
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-wordpress}
+      MYSQL_USER: ${DB_NAME:-wordpress}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-wordpress}
+      PMA_HOST: mysql
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: ${PROJECT_NAME:-my-plugin}-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
 networks:
   default:

@@ -15,34 +15,27 @@ WP_EMAIL=${WP_EMAIL}
 WP_PASSWORD=${WP_PASSWORD}
 WP_TITLE=${WP_TITLE}
 WP_URL=${WP_URL}
+WP_FOLDER=wp_${WP_MULTISITE}_${WP_VERSION}
 
 ## copy variables into wp-cli.yml
-cp /fixtures.yml /var/www/html/fixtures.yml
+source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat /wp-cli.template.yml; echo EOF;)"
 
 ## download wordpress
 wp core download --allow-root --version=$WP_VERSION
-wp core config --allow-root --skip-check --dbname=$DB_NAME --dbuser=root --dbpass=$DB_PASSWORD --dbhost=$DB_HOST --extra-php <<PHP
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true );
-define( 'SCRIPT_DEBUG', true );
-define( 'WP_PLUGIN_DIR', '/var/www/html/plugins' );
-define( 'WP_PLUGIN_URL', 'http://${WP_URL}/plugins');
-PHP
+wp config create --allow-root
 
 ## install WordPress
-if [[ $WP_MULTISITE == "1" ]]; then
-  wp core multisite-install --allow-root --allow-root --url=localhost --title=$WP_TITLE --admin_user=$WP_USER --admin_password=$WP_PASSWORD --admin_email=$WP_EMAIL
-else
-  wp core install --allow-root --allow-root --url=localhost --title=$WP_TITLE --admin_user=$WP_USER --admin_password=$WP_PASSWORD --admin_email=$WP_EMAIL
-fi
+WP_INSTALL="install" && [[ $WP_MULTISITE == "1" ]] && WP_INSTALL="multisite-install"
+wp core $WP_INSTALL --allow-root
 
 ## install WooCommerce: url, version, latest
+## note: WooCommerce will be overwritten each time the container is started
 if [[ $WC_VERSION == http* ]]; then
-  wp plugin install $WC_VERSION --allow-root --activate
+  wp plugin install $WC_VERSION --allow-root --activate --force
 elif [[ $WC_VERSION == "latest" ]]; then
-  wp plugin install woocommerce --allow-root --activate
+  wp plugin install woocommerce --allow-root --activate --force
 else
-  wp plugin install woocommerce --allow-root --version=$WC_VERSION --activate
+  wp plugin install woocommerce --version=$WC_VERSION --allow-root --activate --force
 fi
 
 ## wordpress and woocommerce settings
@@ -51,11 +44,14 @@ wp option update woocommerce_calc_taxes yes --allow-root
 wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
 
 ## install fake data
-# php -d memory_limit=512M "$(which wp)" package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
-# wp fixtures load --allow-root
+wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
+#wp fixtures load --allow-root
 
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root
+
+## move into WordPress folder
+cd $WP_FOLDER
 
 ## install unit test library
 if [ ! -d wordpress-tests-lib ]; then

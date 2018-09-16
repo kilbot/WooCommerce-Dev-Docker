@@ -6,7 +6,7 @@
 This docker-compose environment allows you to run a matrix of PHP, MySQL, WordPress and WooCommerce configurations, for example:
 
 | PHP | MySQL | WordPress |   WooCommerce   | Multisite |
-|-----|-------|-----------|-----------------|-----------|
+|:---:|:-----:|:---------:|:---------------:|:---------:|
 | 5.4 |  5.6  |    4.7    |      3.2.6      |     0     |
 | 5.5 |  5.7  |    4.8    |      3.3.5      |     1     |
 | 5.6 |  8.0  |   latest  |      3.4.4      |           |
@@ -21,16 +21,16 @@ This docker-compose environment allows you to run a matrix of PHP, MySQL, WordPr
 See [Docker.com](https://www.docker.com/products/docker) for more information. You can install Docker directly from [Docker installation page](https://docs.docker.com/engine/installation/)
 
 
-## Getting Started
+## Getting started
 
 1. Make a new project folder and clone (or download) the WooCommerce Development Docker repository:
 ```bash
-mkdir my-plugin && cd my-plugin
-git clone https://github.com/kilbot/WooCommerce-Dev-Docker.git ./docker
+$ mkdir my-plugin && cd my-plugin
+$ git clone https://github.com/kilbot/WooCommerce-Dev-Docker.git ./docker
 ```
 
-2. Populate your plugin files, either from an existing project or perhaps using a WorPress Plugin Boilerplate. 
-Copy the .env and fixtures.yml files from the .docker directory.
+2. Populate your plugin files, either from an existing project or perhaps using a WordPress Plugin Boilerplate. 
+Copy the `.env` and `fixtures.yml` files from the .docker directory.
 ```bash
 $ cp .docker/.env.example .env
 $ cp .docker/fixtures.example.yml fixtures.yml
@@ -46,7 +46,7 @@ my-plugin/
 +-- readme.txt
 ```
 
-3. Start containers
+3. Start the containers
 ```bash
 $ docker-compose -f .docker/docker.yml up -d
 ```
@@ -57,7 +57,7 @@ user: admin
 password: password
 ```
 
-**Note:** The first build may take some time to complete. If you can not access the site, try again after 5-10 minutes.
+> The first build may take some time to complete. If you can not access the site, try again after 5-10 minutes.
 
 
 ## Configuration
@@ -72,15 +72,11 @@ Dummy data is created using the `fixtures.yml` template.
 ### Start
 ```bash
 $ docker-compose -f .docker/docker.yml up -d
-or
-$ docker-compose -f .docker/docker.yml up -d --PHP_VERSION=5.6 --MYSQL_VERSION=5.7 --WP_VERSION=4.8 --WC_VERSION=3.4.4 --WP_MULTISITE=1
 ```
 
 ### Shut down
 ```bash
 $ docker-compose -f .docker/docker.yml kill
-or
-$ docker-compose -f .docker/docker.yml kill --PHP_VERSION=5.6 --MYSQL_VERSION=5.7 --WP_VERSION=4.8 --WC_VERSION=3.4.4 --WP_MULTISITE=1
 ```
 
 ### List active containers

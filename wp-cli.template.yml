@@ -1,0 +1,23 @@
+path: ${WP_FOLDER}
+#url: ${WP_URL}
+#user: ${WP_USER}
+
+config create:
+  dbname: ${DB_NAME}
+  dbuser: root
+  dbpass: ${DB_PASSWORD}
+  dbhost: ${DB_HOST}
+  dbprefix: wp_${WP_MULTISITE}_${WP_VERSION}_wc_${WC_VERSION}
+  extra-php: |
+    define( 'WP_DEBUG', true );
+    define( 'WP_DEBUG_LOG', true );
+    define( 'SCRIPT_DEBUG', true );
+    define( 'WP_PLUGIN_DIR', '/var/www/html/plugins' );
+    define( 'WP_PLUGIN_URL', 'http://${WP_URL}/plugins');
+
+core install:
+  url: ${WP_URL}
+  title: ${WP_TITLE}
+  admin_user: ${WP_USER}
+  admin_password: ${WP_PASSWORD}
+  admin_email: ${WP_EMAIL}
