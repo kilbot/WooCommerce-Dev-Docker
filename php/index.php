@@ -18,5 +18,7 @@
       <li><a href="http://localhost:8092">phpmyadmin</a></li>
       <li><a href="http://localhost:8025">mailhog</a></li>
     </ul>
+    <h2>PHP Info:</h2>
+    <?php phpinfo(); ?>
   </body>
 </html>

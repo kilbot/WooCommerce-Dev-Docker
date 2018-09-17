@@ -58,7 +58,7 @@ user: admin
 password: password
 ```
 
-> The first build may take some time to complete. If you can not access the site, try again after 5-10 minutes.
+> The first build may take some time to complete, if you can not access http://localhost try again after 5-10 minutes.
 
 
 ## Configuration
