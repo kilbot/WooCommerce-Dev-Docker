@@ -15,14 +15,32 @@ WP_EMAIL=${WP_EMAIL}
 WP_PASSWORD=${WP_PASSWORD}
 WP_TITLE=${WP_TITLE}
 WP_URL=${WP_URL}
-WP_FOLDER=wp_${WP_MULTISITE}_${WP_VERSION}
+WP_PATH=wp/${WP_VERSION//.} && [[ $WP_MULTISITE == "1" ]] && WP_PATH="${WP_PATH}_multisite"
+
+## construct database prefix
+DB_PREFIX=wp && [[ $WP_MULTISITE == "1" ]] && DB_PREFIX="${DB_PREFIX}m"
+if [[ $WP_VERSION == "nightly" ]]; then
+  DB_PREFIX="${DB_PREFIX}n"
+elif [[ $WP_VERSION != "latest" ]]; then
+  DB_PREFIX="${DB_PREFIX}${WP_VERSION//.}"
+fi
+DB_PREFIX="${DB_PREFIX}wc"
+if [[ $WC_VERSION == http* ]]; then
+  DB_PREFIX="${DB_PREFIX}b"
+elif [[ $WC_VERSION != "latest" ]]; then
+  DB_PREFIX="${DB_PREFIX}${WC_VERSION//.}"
+fi
+
+## mv index.php into root directory
+cp /index.php index.php
 
 ## copy variables into wp-cli.yml
 source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat /wp-cli.template.yml; echo EOF;)"
 
 ## download wordpress
+mkdir wp
 wp core download --allow-root --version=$WP_VERSION
-wp config create --allow-root
+wp config create --allow-root --skip-check
 
 ## install WordPress
 WP_INSTALL="install" && [[ $WP_MULTISITE == "1" ]] && WP_INSTALL="multisite-install"
@@ -44,14 +62,16 @@ wp option update woocommerce_calc_taxes yes --allow-root
 wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
 
 ## install fake data
-wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
+if [ ! -d vendor ]; then
+  wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
+fi
 #wp fixtures load --allow-root
 
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root
 
 ## move into WordPress folder
-cd $WP_FOLDER
+cd $WP_PATH
 
 ## install unit test library
 if [ ! -d wordpress-tests-lib ]; then
@@ -65,7 +85,7 @@ if [ ! -f wordpress-tests-lib/wp-tests-config.php ]; then
   cp wordpress-tests-lib/wp-tests-config-sample.php wordpress-tests-lib/wp-tests-config.php
   sed -i "s:dirname( __FILE__ ) . '/src/':'$(pwd)/':" wordpress-tests-lib/wp-tests-config.php
   sed -i "s/youremptytestdbnamehere/$DB_NAME/" wordpress-tests-lib/wp-tests-config.php
-  sed -i "s/yourusernamehere/$DB_USER/" wordpress-tests-lib/wp-tests-config.php
+  sed -i "s/yourusernamehere/root/" wordpress-tests-lib/wp-tests-config.php
   sed -i "s/yourpasswordhere/$DB_PASSWORD/" wordpress-tests-lib/wp-tests-config.php
   sed -i "s|localhost|${DB_HOST}|" wordpress-tests-lib/wp-tests-config.php
 fi

@@ -23,6 +23,7 @@ RUN if [ "$PHP_VERSION" -lt "7.0" ]; then \
 COPY php/entrypoint.sh /entrypoint.sh
 COPY wp-cli.template.yml /wp-cli.template.yml
 COPY fixtures.example.yml /fixtures.yml
+COPY php/index.php /index.php
 
 ## install the PHP extensions we need
 RUN apt-get update \

@@ -1,4 +1,4 @@
-path: ${WP_FOLDER}
+path: ${WP_PATH}
 #url: ${WP_URL}
 #user: ${WP_USER}
 
@@ -7,7 +7,7 @@ config create:
   dbuser: root
   dbpass: ${DB_PASSWORD}
   dbhost: ${DB_HOST}
-  dbprefix: wp_${WP_MULTISITE}_${WP_VERSION}_wc_${WC_VERSION}
+  dbprefix: ${DB_PREFIX}
   extra-php: |
     define( 'WP_DEBUG', true );
     define( 'WP_DEBUG_LOG', true );
@@ -16,7 +16,7 @@ config create:
     define( 'WP_PLUGIN_URL', 'http://${WP_URL}/plugins');
 
 core install:
-  url: ${WP_URL}
+  url: ${WP_URL}/${WP_PATH}
   title: ${WP_TITLE}
   admin_user: ${WP_USER}
   admin_password: ${WP_PASSWORD}

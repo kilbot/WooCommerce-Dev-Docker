@@ -46,12 +46,13 @@ my-plugin/
 +-- readme.txt
 ```
 
-3. Start the containers
+3. Start the containers (and watch container logs)
 ```bash
 $ docker-compose -f .docker/docker.yml up -d
+$ docker-compose -f .docker/docker.yml logs -f --tail=10
 ```
 
-4. Go to `https://localhost/wp-admin/admin.php?page=wc-status` and check your development environment with the following credientials:
+4. Go to http://localhost and log into WordPress with the following credentials:
 ```
 user: admin
 password: password
@@ -72,6 +73,11 @@ Dummy data is created using the `fixtures.yml` template.
 ### Start
 ```bash
 $ docker-compose -f .docker/docker.yml up -d
+```
+
+### Watch container logs
+```bash
+$ docker-compose -f .docker/docker.yml logs -f --tail=10
 ```
 
 ### Shut down
