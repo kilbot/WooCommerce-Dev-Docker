@@ -17,25 +17,20 @@ WP_TITLE=${WP_TITLE}
 WP_URL=${WP_URL}
 WP_PATH=wp/${WP_VERSION//.} && [[ $WP_MULTISITE == "1" ]] && WP_PATH="${WP_PATH}_multisite"
 
-## construct database prefix
-DB_PREFIX=wp && [[ $WP_MULTISITE == "1" ]] && DB_PREFIX="${DB_PREFIX}m"
-if [[ $WP_VERSION == "nightly" ]]; then
-  DB_PREFIX="${DB_PREFIX}n"
-elif [[ $WP_VERSION != "latest" ]]; then
-  DB_PREFIX="${DB_PREFIX}${WP_VERSION//.}"
-fi
-DB_PREFIX="${DB_PREFIX}wc"
-if [[ $WC_VERSION == http* ]]; then
-  DB_PREFIX="${DB_PREFIX}b"
-elif [[ $WC_VERSION != "latest" ]]; then
-  DB_PREFIX="${DB_PREFIX}${WC_VERSION//.}"
-fi
+## construct database prefix, eg: wpl_wc3.4.5
+DB_PREFIX=wp
+[[ $WP_MULTISITE == "1" ]] && DB_PREFIX+="m"
+[[ $WP_VERSION == "nightly" ]] && DB_PREFIX+="n"
+[[ $WP_VERSION == "latest" ]] && DB_PREFIX+="l"
+[[ $WP_VERSION != "nightly" ]] && [[ $WP_VERSION != "latest" ]] && DB_PREFIX+="${WP_VERSION//.}"
 
-## mv index.php into root directory
-cp /index.php index.php
+DB_PREFIX+="_wc"
+[[ $WC_VERSION == http* ]] && DB_PREFIX+="b"
+[[ $WC_VERSION == "latest" ]]  && DB_PREFIX+="l"
+[[ $WC_VERSION != http* ]] && [[ $WC_VERSION != "latest" ]] && DB_PREFIX+="${WC_VERSION//.}"
 
 ## copy variables into wp-cli.yml
-source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat /wp-cli.template.yml; echo EOF;)"
+source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat wp-cli.template.yml; echo EOF;)"
 
 ## download wordpress
 mkdir wp
@@ -65,7 +60,8 @@ wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
 if [ ! -d vendor ]; then
   wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
 fi
-#wp fixtures load --allow-root
+
+wp fixtures load --allow-root --file=[ ! -f fixtures.yml ] && "fixtures.example.yml"
 
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root

@@ -7,23 +7,32 @@ ARG xdebug_remote_enable
 ARG xdebug_remote_host
 ARG xdebug_remote_port
 
+# ENV XDEBUG=xdebug-2.5.5
 ENV XDEBUG=xdebug
 ENV GUZZLE=guzzle:5
 ENV PHPUNIT=phpunit-5.7
 
-RUN if [ "$PHP_VERSION" -lt "7.0" ]; then \
-    export XDEBUG=xdebug-2.5.5; \
-  elif [ "$PHP_VERSION" -lt "5.6" ]; then \
-    export PHPUNIT=phpunit-old; \
-  elif [ "$PHP_VERSION" -lt "5.5" ]; then \
-    export XDEBUG=xdebug-2.4.1; \
-  fi
+#RUN if [ ${php_version} == "5.6" ]; then \
+#  export XDEBUG=xdebug-2.5.5; \
+#fi
+#RUN if [ ${php_version} == "5.5" ]; then \
+#  export XDEBUG=xdebug-2.5.5; \
+#  export PHPUNIT=phpunit-old; \
+#fi
+#RUN if [ ${php_version} == "5.4" ]; then \
+#  export XDEBUG=xdebug-2.4.1; \
+#  export PHPUNIT=phpunit-old; \
+#fi
+#
+#RUN echo "XDEBUG: " $XDEBUG \
+#  && echo "GUZZLE: " $GUZZLE \
+#  && echo "PHPUNIT: " $PHPUNIT
 
 ## copy files from repository to container
 COPY php/entrypoint.sh /entrypoint.sh
-COPY wp-cli.template.yml /wp-cli.template.yml
-COPY fixtures.example.yml /fixtures.yml
-COPY php/index.php /index.php
+#COPY wp-cli.template.yml /wp-cli.template.yml
+#COPY fixtures.example.yml /fixtures.yml
+#COPY php/index.php /index.php
 
 ## install the PHP extensions we need
 RUN apt-get update \

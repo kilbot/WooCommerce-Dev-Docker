@@ -68,7 +68,7 @@ The `.env` file contains the default settings for the docker containers.
 Dummy data is created using the `fixtures.yml` template. 
 
 
-## Docker compose management
+## Docker management
 
 ### Start
 ```bash

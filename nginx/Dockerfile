@@ -1,6 +1,5 @@
 FROM nginx
 
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY wait-for-it.sh /wait-for-it.sh
 
 # generate self signed ssl cert
