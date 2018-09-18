@@ -39,7 +39,7 @@ services:
         xdebug_remote_port: ${XDEBUG_REMOTE_PORT:-9000}
     container_name: ${PROJECT_NAME:-my-plugin}-php-${PHP_VERSION:-7.2}
     ports:
-      - "${LOCALHOST_PHP_PORT:-9000}:9000"
+      - "${LOCALHOST_PHP_PORT:-9001}:9000"
     volumes:
       - ./.html:/var/www/html
       - ../:/var/www/html/plugins/${PROJECT_NAME:-my-plugin}

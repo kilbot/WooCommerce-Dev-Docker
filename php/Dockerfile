@@ -44,10 +44,10 @@ RUN sed -i "s|mailhub=mail|mailhub=mailhog:1025|g" /etc/ssmtp/ssmtp.conf
 
 ## xdebug options
 RUN { \
-  echo 'xdebug.remote_autostart=${xdebug_remote_autostart}'; \
-  echo 'xdebug.remote_enable=${xdebug_remote_enable}'; \
-  echo 'xdebug.remote_host=${xdebug_remote_host}'; \
-  echo 'xdebug.remote_port=${xdebug_remote_port}'; \
+  echo 'xdebug.remote_autostart='${xdebug_remote_autostart}; \
+  echo 'xdebug.remote_enable='${xdebug_remote_enable}; \
+  echo 'xdebug.remote_host='${xdebug_remote_host}; \
+  echo 'xdebug.remote_port='${xdebug_remote_port}; \
 } > /usr/local/etc/php/conf.d/xdebug.ini
 
 ## install composer
