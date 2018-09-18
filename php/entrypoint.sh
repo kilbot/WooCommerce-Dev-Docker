@@ -30,7 +30,9 @@ DB_PREFIX+="_wc"
 [[ $WC_VERSION != http* ]] && [[ $WC_VERSION != "latest" ]] && DB_PREFIX+="${WC_VERSION//.}"
 
 ## copy variables into wp-cli.yml
-source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat wp-cli.template.yml; echo EOF;)"
+source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat /wp-cli.template.yml; echo EOF;)"
+mv /index.php index.php
+mv /fixtures.template.yml fixtures.yml
 
 ## download wordpress
 mkdir wp
@@ -56,12 +58,16 @@ wp option update woocommerce_api_enabled yes --allow-root
 wp option update woocommerce_calc_taxes yes --allow-root
 wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
 
-## install fake data
+## load fake data
 if [ ! -d vendor ]; then
   wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
 fi
 
-wp fixtures load --allow-root --file=[ ! -f fixtures.yml ] && "fixtures.example.yml"
+if [ -f plugins/${PROJECT_NAME}/fixtures.yml ]; then 
+  wp fixtures load --allow-root --file=plugins/${PROJECT_NAME}/fixtures.yml
+else 
+  wp fixtures load --allow-root
+fi
 
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root

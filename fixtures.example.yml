@@ -43,7 +43,7 @@ Hellonico\Fixtures\Entity\Term:
     taxonomy: 'product_tag'
 
 Hellonico\Fixtures\Entity\Post:
-  product{1..10}:
+  product{1..2}:
     post_title: '<productName()>'
     post_type: 'product'
     #    post_status: '<randomElement(["draft", "pending", "private", "publish"])>'

@@ -7,38 +7,26 @@ ARG xdebug_remote_enable
 ARG xdebug_remote_host
 ARG xdebug_remote_port
 
-# ENV XDEBUG=xdebug-2.5.5
-ENV XDEBUG=xdebug
-ENV GUZZLE=guzzle:5
-ENV PHPUNIT=phpunit-5.7
+## PHPUNIT 6 uses namespaces, which messes with WP Test Suite
+ENV XDEBUG_VERSION=xdebug
+ENV GUZZLE_VERSION=5
+ENV PHPUNIT_VERSION=5
 
-#RUN if [ ${php_version} == "5.6" ]; then \
-#  export XDEBUG=xdebug-2.5.5; \
-#fi
-#RUN if [ ${php_version} == "5.5" ]; then \
-#  export XDEBUG=xdebug-2.5.5; \
-#  export PHPUNIT=phpunit-old; \
-#fi
-#RUN if [ ${php_version} == "5.4" ]; then \
-#  export XDEBUG=xdebug-2.4.1; \
-#  export PHPUNIT=phpunit-old; \
-#fi
-#
-#RUN echo "XDEBUG: " $XDEBUG \
-#  && echo "GUZZLE: " $GUZZLE \
-#  && echo "PHPUNIT: " $PHPUNIT
+RUN if [ "$php_version" = "5.6" ]; then \
+  export XDEBUG_VERSION=xdebug-2.5.5; \
+fi
 
-## copy files from repository to container
+## copy entrypoint from repository to container
 COPY php/entrypoint.sh /entrypoint.sh
-#COPY wp-cli.template.yml /wp-cli.template.yml
-#COPY fixtures.example.yml /fixtures.yml
-#COPY php/index.php /index.php
+COPY php/wp-cli.template.yml /wp-cli.template.yml
+COPY php/index.php /index.php
+COPY fixtures.example.yml /fixtures.example.yml
 
 ## install the PHP extensions we need
 RUN apt-get update \
   && apt-get install -y --no-install-recommends unzip subversion dos2unix ssmtp \
   && rm -rf /var/lib/apt/lists/* \
-  && pecl install $XDEBUG \
+  && pecl install $XDEBUG_VERSION \
   && docker-php-ext-enable xdebug \
   && docker-php-ext-install mysqli
 
@@ -65,13 +53,8 @@ RUN { \
 ## install composer
 ENV PATH /root/.composer/vendor/bin:$PATH
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
-  && composer global require guzzlehttp/$GUZZLE
-
-## install phpunit
-## force PHPUnit to 5.7, version 6 uses namespaces which casuses problems with WP Test Suite
-RUN curl https://phar.phpunit.de/$PHPUNIT.phar -L > phpunit.phar \
-  && chmod +x phpunit.phar \
-  && mv phpunit.phar /usr/local/bin/phpunit \
+  && composer global require guzzlehttp/guzzle ^${GUZZLE_VERSION} \
+  && composer global require phpunit/phpunit ^${PHPUNIT_VERSION} \
   && phpunit --version
 
 ## add wp-cli for use in entrypoint, also fix permissions

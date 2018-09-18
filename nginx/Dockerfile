@@ -1,6 +1,6 @@
 FROM nginx
 
-COPY wait-for-it.sh /wait-for-it.sh
+COPY nginx/wait-for-it.sh /wait-for-it.sh
 
 # generate self signed ssl cert
 RUN apt-get update \

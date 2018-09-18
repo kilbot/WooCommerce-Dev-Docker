@@ -29,7 +29,7 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'config';
 $cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = get_env('MYSQL_ROOT_PASSWORD');
+$cfg['Servers'][$i]['password'] = $_ENV['MYSQL_ROOT_PASSWORD'];
 /* Server parameters */
 //$cfg['Servers'][$i]['host'] = 'localhost';
 //$cfg['Servers'][$i]['compress'] = false;

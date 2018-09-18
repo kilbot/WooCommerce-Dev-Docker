@@ -48,8 +48,8 @@ my-plugin/
 
 3. Start the containers (and watch container logs)
 ```bash
-$ docker-compose -f .docker/docker.yml up -d
-$ docker-compose -f .docker/docker.yml logs -f --tail=10
+$ docker-compose -f .docker/docker-compose.yml up -d
+$ docker-compose -f .docker/docker-compose.yml logs -f --tail=10
 ```
 
 4. Go to http://localhost and log into WordPress with the following credentials:
@@ -72,17 +72,17 @@ Dummy data is created using the `fixtures.yml` template.
 
 ### Start
 ```bash
-$ docker-compose -f .docker/docker.yml up -d
+$ docker-compose -f .docker/docker-compose.yml up -d
 ```
 
 ### Watch container logs
 ```bash
-$ docker-compose -f .docker/docker.yml logs -f --tail=10
+$ docker-compose -f .docker/docker-compose.yml logs -f --tail=10
 ```
 
 ### Shut down
 ```bash
-$ docker-compose -f .docker/docker.yml kill
+$ docker-compose -f .docker/docker-compose.yml kill
 ```
 
 ### List active containers
@@ -102,7 +102,7 @@ or
 $ docker system prune -fa
 ```
 
-### Purge data and html folders
+### Purge database and wordpress install
 ```bash
-$ rm -rf .data && rm -rf .html
+$ rm -rf .docker/.db && rm -rf .docker/.html
 ```
