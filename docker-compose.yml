@@ -7,9 +7,6 @@ services:
       context: ./
       dockerfile: nginx/Dockerfile
     container_name: ${PROJECT_NAME:-my-plugin}-static
-    expose:
-      - "80"
-      - "443"
     ports:
       - "${LOCALHOST_HTTP_PORT:-80}:80"
       - "${LOCALHOST_HTTPS_PORT:-443}:443"
