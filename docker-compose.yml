@@ -52,6 +52,7 @@ services:
       DB_NAME: ${DB_NAME:-wordpress}
       DB_PASSWORD: ${DB_PASSWORD:-wordpress}
       PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+    command: /wait-for-it.sh -t 600 mysql:3306 -- php-fpm
     env_file: ../.env
 
   mysql:

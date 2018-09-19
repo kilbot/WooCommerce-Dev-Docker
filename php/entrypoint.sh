@@ -32,7 +32,7 @@ DB_PREFIX+="_wc"
 ## copy variables into wp-cli.yml
 source /dev/stdin <<<"$(echo 'cat <<EOF >wp-cli.yml'; cat /wp-cli.template.yml; echo EOF;)"
 mv /index.php index.php
-mv /fixtures.template.yml fixtures.yml
+mv /fixtures.example.yml fixtures.yml
 
 ## download wordpress
 mkdir wp

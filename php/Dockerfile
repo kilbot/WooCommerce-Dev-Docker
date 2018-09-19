@@ -18,6 +18,7 @@ ENV PHPUNIT_VERSION=5
 
 ## copy files from repository to container root
 COPY php/entrypoint.sh php/wp-cli.template.yml php/index.php fixtures.example.yml /
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /
 
 ## install the PHP extensions we need
 RUN apt-get update \
@@ -57,7 +58,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --in
   && chmod +x /usr/local/bin/wp \
   && wp --info --allow-root \
   && dos2unix /entrypoint.sh \
-  && chmod +x /entrypoint.sh
+  && chmod +x /entrypoint.sh \
+  && chmod +x /wait-for-it.sh
 
 ##
 ENTRYPOINT ["/entrypoint.sh"]
