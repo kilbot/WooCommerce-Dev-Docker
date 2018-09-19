@@ -9,7 +9,7 @@ ARG xdebug_remote_port
 
 ## PHPUNIT 6 uses namespaces, which messes with WP Test Suite
 ENV XDEBUG_VERSION=xdebug
-ENV GUZZLE_VERSION=5
+ENV GUZZLE_VERSION=6
 ENV PHPUNIT_VERSION=5
 
 RUN if [ "$php_version" = "5.6" ]; then \

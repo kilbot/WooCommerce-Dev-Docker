@@ -7,6 +7,9 @@ services:
       context: ./
       dockerfile: nginx/Dockerfile
     container_name: ${PROJECT_NAME:-my-plugin}-static
+    expose:
+      - "80"
+      - "443"
     ports:
       - "${LOCALHOST_HTTP_PORT:-80}:80"
       - "${LOCALHOST_HTTPS_PORT:-443}:443"
@@ -17,13 +20,6 @@ services:
     depends_on:
       - php
     command: /wait-for-it.sh -t 600 php:9000 -- nginx -g 'daemon off;'
-    expose:
-      - "80"
-      - "443"
-    networks:
-      default:
-        aliases:
-          - ${WP_URL:-localhost}
     env_file: ../.env
 
   php:
@@ -45,8 +41,6 @@ services:
       - ../:/var/www/html/plugins/${PROJECT_NAME:-my-plugin}
     depends_on:
       - mysql
-    networks:
-      - default
     environment:
       WP_VERSION: ${WP_VERSION:-latest}
       WC_VERSION: ${WC_VERSION:-latest}
@@ -71,8 +65,6 @@ services:
     volumes:
       - ./.db/mysql${MYSQL_VERSION:-8.0}:/var/lib/mysql
       - ./mysql:/etc/mysql/conf.d
-    networks:
-      - default
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-wordpress}
