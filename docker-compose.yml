@@ -26,9 +26,6 @@ services:
       dockerfile: php/Dockerfile
       args:
         php_version: ${PHP_VERSION:-7.2}
-        xdebug_remote_autostart: ${XDEBUG_REMOTE_AUTOSTART:-1}
-        xdebug_remote_enable: ${XDEBUG_REMOTE_ENABLE:-1}
-        xdebug_remote_host: ${XDEBUG_REMOTE_HOST:-192.168.65.1}
         xdebug_remote_port: ${XDEBUG_REMOTE_PORT:-9000}
     container_name: ${PROJECT_NAME:-my-plugin}-php-${PHP_VERSION:-7.2}
     ports:

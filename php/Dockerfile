@@ -7,9 +7,6 @@ LABEL description="PHP with xdebug, phpunit, guzzle, composer and mailhog"
 
 ## build arguments, note: php_version gets reset after FROM, required again here
 ARG php_version
-ARG xdebug_remote_autostart
-ARG xdebug_remote_enable
-ARG xdebug_remote_host
 ARG xdebug_remote_port
 
 ## PHPUNIT 6 uses namespaces, which messes with WP Test Suite
@@ -42,9 +39,8 @@ RUN sed -i "s|mailhub=mail|mailhub=mailhog:1025|g" /etc/ssmtp/ssmtp.conf \
     echo 'error_log=/var/www/html/php_error.log'; \
     echo 'memory_limit=512M'; \
     echo 'sendmail_path=/usr/sbin/ssmtp -t -i'; \
-    echo 'xdebug.remote_autostart='${xdebug_remote_autostart}; \
-    echo 'xdebug.remote_enable='${xdebug_remote_enable}; \
-    echo 'xdebug.remote_host='${xdebug_remote_host}; \
+    echo 'xdebug.remote_enable=1'; \
+    echo 'xdebug.remote_host=host.docker.internal'; \
     echo 'xdebug.remote_port='${xdebug_remote_port}; \
   } > /usr/local/etc/php/conf.d/custom.ini
 
