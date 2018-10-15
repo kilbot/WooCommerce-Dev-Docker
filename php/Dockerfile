@@ -39,6 +39,7 @@ RUN sed -i "s|mailhub=mail|mailhub=mailhog:1025|g" /etc/ssmtp/ssmtp.conf \
     echo 'error_log=/var/www/html/php_error.log'; \
     echo 'memory_limit=512M'; \
     echo 'sendmail_path=/usr/sbin/ssmtp -t -i'; \
+    echo 'xdebug.remote_autostart=1'; \
     echo 'xdebug.remote_enable=1'; \
     echo 'xdebug.remote_host=host.docker.internal'; \
     echo 'xdebug.remote_port='${xdebug_remote_port}; \
