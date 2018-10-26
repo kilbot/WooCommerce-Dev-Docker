@@ -1,71 +1,114 @@
 Hellonico\Fixtures\Entity\User:
   user{1..2}:
-    user_login (unique): <username()>
-    user_pass: '123456'
-    user_email: '<safeEmail()>'
-    user_url: '<url()>'
-    user_registered: '<dateTimeThisDecade()>'
-    first_name: '<firstName()>'
-    last_name: '<lastName()>'
-    description: '<sentence()>'
+    user_login: "(unique) <username()>"
+    user_pass: "123456"
+    user_email: "<safeEmail()>"
+    user_url: "<url()>"
+    user_registered: "<dateTimeThisDecade()>"
+    first_name: "<firstName()>"
+    last_name: "<lastName()>"
+    description: "<sentence()>"
     role: '<randomElement(["subscriber", "customer"])>'
     meta:
-      billing_first_name: '<firstName()>'
-      billing_last_name: '<lastName()>'
-      billing_company: '<company()>'
-      billing_address_1: '<streetAddress()>'
-      billing_address_2: '<secondaryAddress()>'
-      billing_city: '<city()>'
-      billing_postcode: '<postcode()>'
-      billing_country: '<countryCode()>'
-      billing_state: '<state()>'
-      billing_phone: '<phoneNumber()>'
-      billing_email: '<safeEmail()>'
-      shipping_first_name: '<firstName()>'
-      shipping_last_name: '<lastName()>'
-      shipping_company: '<company()>'
-      shipping_address_1: '<streetAddress()>'
-      shipping_address_2: '<secondaryAddress()>'
-      shipping_city: '<city()>'
-      shipping_postcode: '<postcode()>'
-      shipping_country: '<countryCode()>'
-      shipping_state: '<state()>'
+      billing_first_name: "<firstName()>"
+      billing_last_name: "<lastName()>"
+      billing_company: "<company()>"
+      billing_address_1: "<streetAddress()>"
+      billing_address_2: "<secondaryAddress()>"
+      billing_city: "<city()>"
+      billing_postcode: "<postcode()>"
+      billing_country: "<countryCode()>"
+      billing_state: "<state()>"
+      billing_phone: "<phoneNumber()>"
+      billing_email: "<safeEmail()>"
+      shipping_first_name: "<firstName()>"
+      shipping_last_name: "<lastName()>"
+      shipping_company: "<company()>"
+      shipping_address_1: "<streetAddress()>"
+      shipping_address_2: "<secondaryAddress()>"
+      shipping_city: "<city()>"
+      shipping_postcode: "<postcode()>"
+      shipping_country: "<countryCode()>"
+      shipping_state: "<state()>"
 
 Hellonico\Fixtures\Entity\Term:
   category{1..2}:
-    name (unique): '<productCategoryName())>'
-    description: '<sentence()>'
-    parent: '50%? <termId(childless=1)>'
-    taxonomy: 'product_cat'
+    name (unique): "<productCategoryName())>"
+    description: "<sentence()>"
+    parent: "50%? <termId(childless=1)>"
+    taxonomy: "product_cat"
   tag{1..2}:
-    name (unique): '<words(2, true)>'
-    description: '<sentence()>'
-    taxonomy: 'product_tag'
+    name (unique): "<words(2, true)>"
+    description: "<sentence()>"
+    taxonomy: "product_tag"
 
 Hellonico\Fixtures\Entity\Post:
-  product{1..2}:
-    post_title: '<productName()>'
-    post_type: 'product'
+  product{1..5}:
+    post_title: "<productName()>"
+    post_type: "product"
     #    post_status: '<randomElement(["draft", "pending", "private", "publish"])>'
-    post_content: '<paragraphs(rand(1,5), true)>'
-    post_excerpt: '<paragraphs(1, true)>'
+    post_content: "<paragraphs(rand(1,5), true)>"
+    post_excerpt: "<paragraphs(1, true)>"
+    post_date: "<dateTimeThisDecade()>"
     tax_input:
-      product_cat: '<numberBetween(1, 3)>x @category*->term_id'
-      product_tag: '<numberBetween(1, 5)>x @tag*->term_id'
+      product_cat: "<numberBetween(1, 3)>x @category*->term_id"
+      product_tag: "<numberBetween(1, 5)>x @tag*->term_id"
       product_type: '<randomElement(["simple", "grouped", "variable"])>'
     meta:
       _backorders: '<randomElement(["yes", "no"])>'
       _downloadable: '<randomElement(["yes", "no"])>'
       _manage_stock: '<randomElement(["yes", "no"])>'
-      _price: '<productPrice()>'
-      _sku: '<ean13()>'
+      _price: "<productPrice()>"
+      _sku: "<ean13()>"
       _sold_individually: '<randomElement(["yes", "no"])>'
-      _stock: '<numberBetween(1, 100)>'
+      _stock: "<numberBetween(1, 100)>"
       _tax_class: '<randomElement(["standard", "vat"])>'
       _tax_status: '<randomElement(["taxable", "shipping", "none"])>'
       _virtual: '<randomElement(["yes", "no"])>'
-      _weight: '<numberBetween(1, 100)>'
+      _weight: "<numberBetween(1, 100)>"
 
-
-        # order{1..2}:
-      #   post_type: 'shop_order'
+Hellonico\Fixtures\Entity\Order:
+  order{1..2}:
+    post_date: "<dateTimeThisDecade()>"
+    post_type: "shop_order"
+    post_status: '<randomElement(["wc-pending", "wc-processing", "wc-completed", "wc-cancelled", "wc-refunded", "wc-failed"])>'
+    meta:
+      _customer_user: "@user*->ID"
+      _billing_first_name: "<firstName()>"
+      _billing_last_name: "<lastName()>"
+      _billing_company: "<company()>"
+      _billing_address_1: "<streetAddress()>"
+      _billing_address_2: "<secondaryAddress()>"
+      _billing_city: "<city()>"
+      _billing_postcode: "<postcode()>"
+      _billing_country: "<countryCode()>"
+      _billing_state: "<state()>"
+      _billing_phone: "<phoneNumber()>"
+      _billing_email: "<safeEmail()>"
+      _shipping_first_name: "<firstName()>"
+      _shipping_last_name: "<lastName()>"
+      _shipping_company: "<company()>"
+      _shipping_address_1: "<streetAddress()>"
+      _shipping_address_2: "<secondaryAddress()>"
+      _shipping_city: "<city()>"
+      _shipping_postcode: "<postcode()>"
+      _shipping_country: "<countryCode()>"
+      _shipping_state: "<state()>"
+      _cart_hash: "<sha256()>"
+      _completed_date: "<dateTimeThisDecade()>"
+      _created_via: "wp-fixtures"
+      _customer_ip_address: "<ipv4()>"
+      _customer_user_agent: "Dummy Data"
+      _date_completed: "<dateTimeThisDecade()>"
+      _date_paid: "<dateTimeThisDecade()>"
+      _order_currency: "GBP"
+      _order_version: "3.5.0"
+      _payment_method: "pos_cash"
+      _payment_method_title: "Cash"
+      _pos: "<randomElement([0, 1])>"
+      _prices_include_tax: '<randomElement(["no", "yes"])>'
+      _transaction_id: "<uuid()>"
+    __calls:
+      - addLineItems: ["<numberBetween(1, 5)>x @product*"]
+      # - addFeeLines (10%?): []
+      # - addShippingLines (20%?): []
