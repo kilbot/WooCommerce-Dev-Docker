@@ -58,22 +58,11 @@ wp option update woocommerce_api_enabled yes --allow-root
 wp option update woocommerce_calc_taxes yes --allow-root
 wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root
 
-## load fake data
-if [ ! -d vendor ]; then
-  wp package install git@github.com:kilbot/wp-cli-fixtures.git --allow-root
-fi
-
-if [ -f plugins/${PROJECT_NAME}/fixtures.yml ]; then 
-  wp fixtures load --allow-root --file=plugins/${PROJECT_NAME}/fixtures.yml
-else 
-  wp fixtures load --allow-root
-fi
-
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root
 
 ## install Smooth Generator
-wp plugin install https://codeload.github.com/kilbot/wc-smooth-generator/zip/master --allow-root --activate --force
+wp plugin install https://github.com/kilbot/wc-smooth-generator/zipball/master/ --allow-root --activate --force
 composer install -d plugins/wc-smooth-generator-master/
 
 ## move into WordPress folder
