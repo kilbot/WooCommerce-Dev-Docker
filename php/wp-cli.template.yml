@@ -1,6 +1,7 @@
 path: ${WP_PATH}
 #url: ${WP_URL}
 user: 1
+debug: true
 
 config create:
   dbname: ${DB_NAME}

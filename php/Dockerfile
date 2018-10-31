@@ -14,7 +14,7 @@ ENV GUZZLE_VERSION=6
 ENV PHPUNIT_VERSION=5
 
 ## copy files from repository to container root
-COPY php/entrypoint.sh php/wp-cli.template.yml php/index.php fixtures.example.yml /
+COPY php/entrypoint.sh php/wp-cli.template.yml php/index.php /
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /
 
 ## install the PHP extensions we need

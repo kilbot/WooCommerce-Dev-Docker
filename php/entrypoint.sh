@@ -72,8 +72,17 @@ fi
 ## activate the current project
 wp plugin activate $PROJECT_NAME --allow-root
 
+## install Smooth Generator
+wp plugin install https://codeload.github.com/kilbot/wc-smooth-generator/zip/master --allow-root --activate --force
+composer install -d plugins/wc-smooth-generator-master/
+
 ## move into WordPress folder
 cd $WP_PATH
+
+# generator dummy data
+wp wc generate customers 25 --allow-root
+wp wc generate products 25 --allow-root
+wp wc generate orders 25 --allow-root
 
 ## install unit test library
 if [ ! -d wordpress-tests-lib ]; then
