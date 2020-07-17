@@ -69,9 +69,9 @@ composer install -d plugins/wc-smooth-generator-master/
 cd $WP_PATH
 
 # generator dummy data
-wp wc generate customers 25 --allow-root
-wp wc generate products 25 --allow-root
-wp wc generate orders 25 --allow-root
+wp wc generate customers 5 --allow-root
+wp wc generate products 5 --allow-root
+wp wc generate orders 5 --allow-root
 
 ## install unit test library
 if [ ! -d wordpress-tests-lib ]; then
